@@ -1,0 +1,136 @@
+\documentclass{report}
+\usepackage{tgpagella}
+\usepackage{newpxmath}
+\usepackage{amsmath}
+\usepackage{algorithm}
+\usepackage{url}
+\usepackage{bm}
+\author{夕叢霧香 (@kirika\_comp)}
+\title{整数論テクニック集}
+
+\begin{document}
+\maketitle
+\chapter{はじめに}
+これは、競技プログラミングで使える整数論のテクニックをまとめた文章です。
+コメント等はTwitter (@kirika\_comp) までお願いします。
+\chapter{群論}
+\section{${}\bmod p$ のアルゴリズム}
+\subsection{mod\_sqrt, Tonelli-Shanks のアルゴリズム}
+\subsubsection{前提知識}
+フェルマーの小定理から、$a \not\equiv 0 \pmod p$ のとき $a^{p-1}\equiv1 \pmod p$であることに注意しましょう。
+$a \equiv x^2 \pmod p$ となる $x$ が存在する場合、$a$を \emph{平方剰余}、そうでない場合 $a$ を\emph{平方非剰余}と呼びます。
+$p$ が奇素数の時、0を除くと平方剰余と平方非剰余の割合は1:1です。
+また、$a\neq0 \pmod p$ のとき$a^{(p-1)/2}$ は ${}\bmod p$ で $1$ か $-1$ かのどちらかですが、$a$ が平方剰余のとき1、平方非剰余のとき-1です。
+
+
+\subsubsection{問題}
+ある $x$ について $a \equiv x^2 \pmod p$ が成り立つ $a$ が与えられる。この時、$x$ を求めよ。
+
+\subsubsection{解法}
+$p$ が${}\bmod 4$ で3の時は簡単です。$x \equiv a^{(p+1)/4}$とすると、$x^2 \equiv a^{(p+1)/2}$ です。ここで、$a \equiv y^2$ となる $y$ が存在するので、$a^{(p-1)/2}\equiv y^{p-1}\equiv 1 \pmod p$ です。
+だから、$x^2 \equiv a$ が成り立ちます。
+
+$p$ が ${}\bmod 4$ で 1の時は結構複雑なことをします。ここではTonelli-Shanksの方法と呼ばれるアルゴリズムを説明します。
+
+\subsubsection{Tonelli-Shanks (トネリ-シャンクス) のアルゴリズム}
+[reference]\url{https://en.wikipedia.org/wiki/Tonelli%E2%80%93Shanks_algorithm}
+
+入力: $p$: 素数, $a (\neq 0)$: 平方剰余
+
+出力: $r^2 \equiv a \pmod p$ を満たす$r$
+
+$p = q \times 2^s + 1$ とします。 ($s \ge 1$, $q$は奇数)
+
+注意: 以下の疑似コードでは代入は全部同時に行います。特に5.で、$t$に代入する値は前の $c$ によって決まります。
+
+注意2: 本来の Tonelli-Shanks とは違いますが、不変量を考えることで筆者が復元できたのが以下のアルゴリズムなので、こちらの方が理解しやすいと思います。(効率は悪い)
+
+\begin{algorithm}                      
+\caption{単純化された Tonelli-Shanks のアルゴリズム}
+\label{alg1}
+1. $z^{(p-1)/2} \equiv -1 \pmod p$ となるような $z$ を選ぶ。このような $z$ は確率1/2でヒットするため、何個か試せば必ず見つかる。
+
+2. $m := s, c:\equiv z^q, t :\equiv a^q, r :\equiv a^{(q + 1)/2}$ とする。以降不変量 $\bm{r^2\equiv at \pmod p, t^{2^{m - 1}} \equiv 1 \pmod p, c^{2^{m-1}} \equiv -1 \pmod p}$ を崩さないように注意して操作する。
+
+3. 以降 $m$ を減らしていく。$m$ が1なら終了。そうでなければ、$t^{2^{m-2}} \equiv 1 \pmod p$ なら4.へ、そうでなければ5.へ行く。
+
+4. $c :\equiv c^2 \pmod p, m := m - 1$, 6.へ行く。
+
+5. $c :\equiv c^2 \pmod p, t :\equiv c^2 t \pmod p, r :\equiv cr \pmod p, m := m - 1$ を\emph{全て同時に}代入する, 6.へ行く。
+
+6. 3.へ行く。
+
+\end{algorithm}
+終了時には$m=1$なので、$t\equiv 1 \pmod p$になっているはずで、そのときの $r$ が求める値です。(不変量 $r^2\equiv at \pmod p$ に注意。)
+
+
+
+C++での実装は以下のようになります。
+\begin{verbatim}
+#include<random>
+using namespace std;
+typedef long long lint;
+
+lint powmod(lint a,lint e,lint p){
+  lint r=1;
+  for(int i=63;i>=0;--i){
+    r=r*r%p;
+    if(e&1LL<<i)r=r*a%p;
+  }
+  return r;
+}
+
+// p:素数, aは0でなく、平方剰余
+lint simplified_tonelli_shanks(lint p,lint a){
+  mt19937 mt;
+  if(powmod(a,(p-1)/2,p)!=1)return -1;
+  lint q=p-1;
+  lint m=0;
+  while(q%2==0)q/=2,m++;
+  lint z;
+  do{
+    z=mt()%p;
+  }while(powmod(z,(p-1)/2,p)!=p-1);
+  lint c=powmod(z,q,p);
+  lint t=powmod(a,q,p);
+  lint r=powmod(a,(q+1)/2,p);
+  for(;m>1;--m){
+    lint tmp=powmod(t,1<<(m-2),p);
+    if(tmp!=1)
+      r=r*c%p,t=t*(c*c%p)%p;
+    c=c*c%p;
+  }
+  return r;
+}
+	
+\end{verbatim}
+
+例を挙げて見ていきましょう。
+$p = 41$, $a = 8$ とします。
+
+$p = 5 * 2^3 + 1$ なので、$q = 5, s = 3$ です。
+$z$ として、ここでは 7 をとります。
+
+$m := 3, c :\equiv 7^5 = 16807 \equiv 38, t :\equiv 8^5 = 32768 \equiv 9, r \equiv 8^3 = 512 \equiv 20$ となります。 (${} \bmod 41$ は適宜省略)
+
+ \begin{table}[htb]
+  \begin{center}
+  \begin{tabular}[t]{|c|c|c|c|}
+   \hline
+   $m$ & $c$ & $t$ & $r$ \\ \hline
+   3 & 38 & 9 & 20 \\
+   2 & 9 & 40 & 22 \\
+   1 & 40 & 1 & 34 \\ \hline
+  \end{tabular}
+  \end{center}
+ \end{table}
+
+
+よって、$x \equiv \pm 34 (=\mp 7)$ が答えになります。
+
+
+以上のアルゴリズムで、4.のパートに無駄があります。4.では$c$と$m$しか変更していないので、$t^{2^i}\neq 1$ となる最大の $i$ が見つけられれば、4.の操作をまとめることができます。このアイデアを使うのが、本来の Tonelli-Shanks のアルゴリズムです。
+
+(Wikipedia のTonelli-Shanks の説明)
+
+\end{document}
