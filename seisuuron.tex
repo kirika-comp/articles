@@ -12,9 +12,10 @@
 \title{整数論テクニック集}
 
 \newcommand{\Z}{\mathbb{Z}}
+\newcommand{\legendre}[2]{\left(\frac{#1}{#2}\right)}
 \theoremstyle{definition}
-\newtheorem{theorem}{Example}[section]
-\newtheorem{example}[theorem]{Example}
+\newtheorem{theorem}{定理}[section]
+\newtheorem{example}[theorem]{例}
 \makeindex
 \begin{document}
 \maketitle
@@ -150,11 +151,61 @@ $m := 3, c :\equiv 7^5 = 16807 \equiv 38, t :\equiv 8^5 = 32768 \equiv 9, r \equ
 
 以上のアルゴリズムで、4.のパートに無駄があります。4.では$c$と$m$しか変更していないので、$t^{2^i}\not \equiv 1 \pmod p$ となる最大の $i$ が見つけられれば、4.の操作をまとめることができます。このアイデアを使うのが、本来の Tonelli-Shanks のアルゴリズムです。
 
-(Wikipedia のTonelli-Shanks の説明)
+(TODO Wikipedia のTonelli-Shanks の説明)
 
 \begin{itembox}[l]{COLUMN}
  群論的なアプローチをすると、もっと綺麗な見方が得られます。
 $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-Sylow部分群\index{Sylowぶぶんぐん@Sylow部分群}) $H = \Z/2^s\Z$ を考えます。このとき、$z$ と $t$ は $H$ の元であることがわかります。$t$が$1$になるように、うまく$H^2$の元で調整しているわけです。
 \end{itembox}
+\chapter{高度な内容}
+ \section{平方剰余の相互法則}
+  \subsection{ルジャンドル記号}
+  TODO ルジャンドル記号\index{るじゃんどるきごう@ルジャンドル記号}
+  \subsection{平方剰余の相互法則}
+  以下の定理が成り立つことが知られています。
+  \begin{theorem}[平方剰余の相互法則]
+   $p, q \ge 3$ を奇素数とする。このとき、以下が成立する。
+   \begin{displaymath}
+    \left(\frac{p}{q}\right)\left(\frac{q}{p}\right) = (-1)^{\frac{p-1}{2} \times \frac{q-1}{2}}
+   \end{displaymath}
+  \end{theorem}
+  \begin{theorem}[補充法則]
+   $p \ge 3$ を奇素数とする。このとき、以下が成立する。
+   \begin{displaymath}
+    \legendre{-1}{p} = (-1)^{\frac{p-1}{2}},
+    \legendre{2}{p} = (-1)^{\frac{p^2-1}{8}}
+   \end{displaymath}
+  \end{theorem}
+  これを利用することで、ルジャンドル記号を計算できます。
+  \begin{example}
+   \label{ex:legendre-3}
+   $p \neq 2,3$を、2,3以外の素数とします。このとき、
+   $\legendre{3}{p}$ は、$p$ を12で割った余りで完全に決まります。
+   \begin{displaymath}
+    \legendre{3}{p} = (-1)^{\frac{p-1}{2}}\legendre{p}{3}
+   \end{displaymath}
+   ここで、
+   \begin{displaymath}
+    \legendre{p}{3} = \begin{cases}
+		       1 & \mbox{if }p\equiv 1 \pmod 3 \\
+		       -1 & \mbox{if }p\equiv 2 \pmod 3
+		      \end{cases}
+   \end{displaymath}
+   なので、
+   \begin{displaymath}
+    (-1)^{\frac{p-1}{2}} = \begin{cases}
+			    1 & \mbox{if }p \equiv 1 \pmod 4 \\
+			    -1 & \mbox{if }p \equiv 3 \pmod 4
+			   \end{cases}
+   \end{displaymath}
+   と合わせ、
+   \begin{displaymath}
+    \legendre{3}{p} = \begin{cases}
+		       1 & \mbox{if }p\equiv 1,11 \pmod{12} \\
+		       -1 & \mbox{if }p\equiv 5,7 \pmod{12}
+		      \end{cases}
+   \end{displaymath}
+   が得られます。
+  \end{example}
 \printindex
 \end{document}
