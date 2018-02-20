@@ -1,4 +1,4 @@
-\documentclass{report}
+\documentclass{jsarticle}
 \usepackage{amsmath}
 \usepackage{ascmac}
 \usepackage{amsthm}
@@ -9,7 +9,7 @@
 \usepackage{bm}
 \usepackage{makeidx}
 \author{夕叢霧香 (@kirika\_comp)}
-\title{整数論テクニック集}
+\title{整数論テクニック集 DRAFT}
 
 \newcommand{\Z}{\mathbb{Z}}
 \newcommand{\legendre}[2]{\left(\frac{#1}{#2}\right)}
@@ -19,10 +19,14 @@
 \makeindex
 \begin{document}
 \maketitle
-\chapter{はじめに}
+ \section{はじめに}
 これは、競技プログラミングで使える整数論のテクニックをまとめた文章です。
+AtCoder の青から赤下位程度をターゲットにしています。
+
+整数論の問題は得てして「地頭ゲー」などと呼ばれやすいですが、実はそうではなく、知識を持っていることで解ける問題が多いです。しかし、その知識については、日本の競技プログラマーたちには、
+あまり知られていないように見えます。そのため、この文章を書くことにしました。
+
 コメント等はTwitter (@kirika\_comp) までお願いします。
-\chapter{群論}
  \section{${}\bmod p$ のアルゴリズム}
   \subsection{基礎知識}
   \label{subsec:group-preliminaries}
@@ -157,7 +161,6 @@ $m := 3, c :\equiv 7^5 = 16807 \equiv 38, t :\equiv 8^5 = 32768 \equiv 9, r \equ
  群論的なアプローチをすると、もっと綺麗な見方が得られます。
 $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-Sylow部分群\index{Sylowぶぶんぐん@Sylow部分群}) $H = \Z/2^s\Z$ を考えます。このとき、$z$ と $t$ は $H$ の元であることがわかります。$t$が$1$になるように、うまく$H^2$の元で調整しているわけです。
 \end{itembox}
-\chapter{高度な内容}
  \section{平方剰余の相互法則}
   \subsection{ルジャンドル記号}
   TODO ルジャンドル記号\index{るじゃんどるきごう@ルジャンドル記号}
