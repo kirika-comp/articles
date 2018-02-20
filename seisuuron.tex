@@ -2,12 +2,14 @@
 \usepackage{tgpagella}
 \usepackage{newpxmath}
 \usepackage{amsmath}
+\usepackage{ascmac}
 \usepackage{algorithm}
 \usepackage{url}
 \usepackage{bm}
 \author{夕叢霧香 (@kirika\_comp)}
 \title{整数論テクニック集}
 
+\newcommand{\Z}{\mathbb{Z}}
 \begin{document}
 \maketitle
 \chapter{はじめに}
@@ -27,6 +29,7 @@ $p$ が奇素数の時、0を除くと平方剰余と平方非剰余の割合は
 ある $x$ について $a \equiv x^2 \pmod p$ が成り立つ $a$ が与えられる。この時、$x$ を求めよ。
 
 \subsubsection{解法}
+まず、簡単のため $p = 2$ の場合を除外します(このときは$a^2 \equiv a \pmod 2$ なので簡単)。また$a \equiv 0 \pmod p$ の場合も除外します($0^2 = 0$なので簡単)。
 $p$ が${}\bmod 4$ で3の時は簡単です。$x \equiv a^{(p+1)/4}$とすると、$x^2 \equiv a^{(p+1)/2}$ です。ここで、$a \equiv y^2$ となる $y$ が存在するので、$a^{(p-1)/2}\equiv y^{p-1}\equiv 1 \pmod p$ です。
 だから、$x^2 \equiv a$ が成り立ちます。
 
@@ -35,7 +38,7 @@ $p$ が ${}\bmod 4$ で 1の時は結構複雑なことをします。ここで�
 \subsubsection{Tonelli-Shanks (トネリ-シャンクス) のアルゴリズム}
 [reference]\url{https://en.wikipedia.org/wiki/Tonelli%E2%80%93Shanks_algorithm}
 
-入力: $p$: 素数, $a (\neq 0)$: 平方剰余
+入力: $p (\ge 3)$: 奇素数, $a (\not \equiv 0 \pmod p)$: 平方剰余
 
 出力: $r^2 \equiv a \pmod p$ を満たす$r$
 
@@ -129,8 +132,12 @@ $m := 3, c :\equiv 7^5 = 16807 \equiv 38, t :\equiv 8^5 = 32768 \equiv 9, r \equ
 よって、$x \equiv \pm 34 (=\mp 7)$ が答えになります。
 
 
-以上のアルゴリズムで、4.のパートに無駄があります。4.では$c$と$m$しか変更していないので、$t^{2^i}\neq 1$ となる最大の $i$ が見つけられれば、4.の操作をまとめることができます。このアイデアを使うのが、本来の Tonelli-Shanks のアルゴリズムです。
+以上のアルゴリズムで、4.のパートに無駄があります。4.では$c$と$m$しか変更していないので、$t^{2^i}\not \equiv 1 \pmod p$ となる最大の $i$ が見つけられれば、4.の操作をまとめることができます。このアイデアを使うのが、本来の Tonelli-Shanks のアルゴリズムです。
 
 (Wikipedia のTonelli-Shanks の説明)
 
+\begin{itembox}[l]{COLUMN}
+ 群論的なアプローチをすると、もっと綺麗な見方が得られます。
+$(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-Sylow部分群) $H = \Z/2^s\Z$ を考えます。このとき、$z$ と $t$ は $H$ の元であることがわかります。$t$が$1$になるように、うまく$H^2$の元で調整しているわけです。
+\end{itembox}
 \end{document}
