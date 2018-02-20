@@ -8,9 +8,10 @@
 \usepackage{url}
 \usepackage{bm}
 \usepackage{makeidx}
-\author{夕叢霧香 (@kirika\_comp)}
+\author{夕叢霧香 (Kirika Yuumura, @kirika\_comp)}
 \title{整数論テクニック集 DRAFT}
 
+\newcommand{\Q}{\mathbb{Q}}
 \newcommand{\Z}{\mathbb{Z}}
 \newcommand{\legendre}[2]{\left(\frac{#1}{#2}\right)}
 \theoremstyle{definition}
@@ -20,13 +21,27 @@
 \begin{document}
 \maketitle
  \section{はじめに}
-これは、競技プログラミングで使える整数論のテクニックをまとめた文章です。
-AtCoder の青から赤下位程度をターゲットにしています。
+ これは、競技プログラミングで使える整数論のテクニックをまとめた文章です。
+ AtCoder の青から赤下位程度をターゲットにしています。
 
-整数論の問題は得てして「地頭ゲー」などと呼ばれやすいですが、実はそうではなく、知識を持っていることで解ける問題が多いです。しかし、その知識については、日本の競技プログラマーたちには、
-あまり知られていないように見えます。そのため、この文章を書くことにしました。
-
-コメント等はTwitter (@kirika\_comp) までお願いします。
+ 整数論の問題は得てして「地頭ゲー」などと呼ばれやすいですが、実はそうではなく、知識を持っていることで解ける問題が多いです。しかし、その知識については、日本の競技プログラマーたちには、
+ あまり知られていないように見えます。そのため、この文章を書くことにしました。
+ 
+ コメント等はTwitter (@kirika\_comp) までお願いします。
+ \section{mod $p$上の計算}
+ \label{sec:mod-p-arithmetic}
+  \subsection{基本: 整数の加減乗除}
+  計算結果が大きすぎるため、${} \bmod (10^9+7)$で出力せよ、という問題が結構あります。
+  このような問題の場合は、最終結果を${} \bmod (10^9+7)$するのではなく、途中結果も${} \bmod (10^9+7)$することで、途中結果が大きくなりすぎるのを防ぐことができます。
+  \subsection{基本: 分数の加減乗除}
+  たまに、分数についての言及があることがあります。大抵以下のような形をしています。
+  \begin{center}
+   答えは分数$A/B$ になる。このとき、$B$ の mod $(10^9+7)$ での逆元を$B^{-1}$ として、$A \times B^{-1} \bmod (10^9 + 7)$を出力せよ。
+  \end{center}
+  これも、特別な配慮などはせずに、途中結果をmod $(10^9+7)$ で保持しておくだけで、計算が正しく行えます。
+  \begin{itembox}[l]{COLUMN}
+   専門用語を使うと、これは環準同型$\Z \to \Z/(10^9+7)\Z$が、体の準同型$\Q \to \Z/(10^9+7)\Z$ に拡張できる、ということができます(ただし、細かい点を除く)。興味のある人は、調べてみてください。
+  \end{itembox}
  \section{${}\bmod p$ のアルゴリズム}
   \subsection{基礎知識}
   \label{subsec:group-preliminaries}
