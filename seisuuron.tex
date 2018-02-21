@@ -216,5 +216,33 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
    \end{displaymath}
    が得られます。
   \end{example}
+  \subsection{2次体}
+  \subsection{有限体}
+  任意の素数$p$と正の整数$e$に対して、$p^e$要素の有限体が存在します。逆に、有限体の要素数は、必ず$p^e$ の形で表せます。このような有限体は、一意に存在します。これを$\finiteField{p^e}$と表記することにします。
+  \subsection{フロベニウス写像}
+  $\Frob \colon \finiteField{p^e} \to \finiteField{p^e}, \Frob(x) := x^p$ を\emph{フロベニウス写像}\index{ふろべにうすしゃぞう@フロベニウス写像}と呼びます。 TODO
+  \begin{proposition}
+   $\Frob$は$e$回適用すると元に戻る。つまり、$\Frob^e(x) = x$。
+  \end{proposition}
+  \begin{proposition}
+   $x, \Frob(x), \Frob^2(x), \ldots, \Frob^{e-1}(x)$ は全て共役(TODO definition)。つまり、TODO。
+  \end{proposition}
+  \subsection{応用例}
+  \begin{itembox}[l]{例題}
+   数列 $a_0 = 2, a_{n+1} = a_n(a_n+4)$がある。このとき、素数$M$に対して、$a_N \bmod M$ を求めよ。
+
+   (出典: yukicoder No.613 Solitude by the window)
+  \end{itembox}
+  この問題は、一般項を求めるところが一番難しく、一般項を求めた後は数論的な考察を進めるだけで解けます。
+  ここでは、$a_n = (2+\sqrt{3})^{2^n} + (2-\sqrt{3})^{2^n} - 2$ であることがわかっているとして、この状態から問題を解いてみましょう。$a_n \bmod M$が計算できれば良いです。
+
+  $(2+\sqrt{3})^{2^n} \bmod M$が計算できれば万事解決です。
+  簡単のため、$M$が2でも3でもないとしましょう。先にも述べた(TODO)通り、3が${}\bmod M$で平方剰余なら(つまり$\legendre{3}{M}=1$なら)、議論は$\finiteField{M}$の中で完結できます。
+  3が${}\bmod M$で平方非剰余(つまり$\legendre{3}{M}=-1$)の場合を考えます。
+  このとき、$\finiteField{M}$に$\sqrt{3}$を添加して拡大したものは、$\finiteField{M^2}$と同型になります。
+  \begin{displaymath}
+   \finiteField{M}(\sqrt{3}) \cong \finiteField{M^2}
+  \end{displaymath}
+  ここで、$\Frob(2+\sqrt{3}) = (2+\sqrt{3})^M \in \finiteField{M^2}$がどのような元になるかを考えてみましょう。$2+\sqrt{3}$の共役は自分自身と$2-\sqrt{3}$のみなので、$\Frob(2+\sqrt{3})=2-\sqrt{3}$でなければなりません。これから、$(2+\sqrt{3})^{M+1}=(2-\sqrt{3})(2+\sqrt{3})=1$であることが分かります。
 \printindex
 \end{document}
