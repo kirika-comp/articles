@@ -61,8 +61,8 @@
   まず、$\cos\theta + i\sin\theta$はもちろん、$\langle \cos\theta,1\rangle=\langle d/l,1\rangle$として表現されます。掛け算についてですが、
   \begin{displaymath}
    (a,b) \times (c,d) = (a+ib\sin\theta)(c+id\sin\theta)
-   =(ac+bd(\sin^2\theta-1))+i(ad+bc)\sin\theta
-   =\langle ac+bd(\sin^2\theta-1), ad+bc\rangle
+   =(ac-bd\sin^2\theta)+i(ad+bc)\sin\theta
+   =\langle ac+bd(\cos^2\theta-1), ad+bc\rangle
   \end{displaymath}
   より、問題なく実装することができます。これによりべき乗も問題なく実装でき、問題が解けます。
 \lstinputlisting[caption=BROCLK.cpp,label=BROCLK]{FEB18-BROCLK.cpp}
@@ -96,13 +96,7 @@ $p$ が${}\bmod 4$ で3の時は簡単です。$x \equiv a^{(p+1)/4}$とする�
 $p$ が ${}\bmod 4$ で 1の時は結構複雑なことをします。ここではTonelli-Shanksの方法と呼ばれるアルゴリズムを説明します。
 
 \subsubsection{Tonelli-Shanks (トネリ-シャンクス) のアルゴリズム}
-[reference]\url{https://en.wikipedia.org/wiki/Tonelli%E2%80%93Shanks_algorithm}
-
-入力: $p (\ge 3)$: 奇素数, $a (\not \equiv 0 \pmod p)$: 平方剰余
-
-出力: $r^2 \equiv a \pmod p$ を満たす$r$
-
-$p = q \times 2^s + 1$ とします。 ($s \ge 1$, $q$は奇数)
+Reference: \url{https://en.wikipedia.org/wiki/Tonelli%E2%80%93Shanks_algorithm}
 
 注意: 以下の疑似コードでは代入は全部同時に行います。特に5.で、$t$に代入する値は前の $c$ によって決まります。
 
@@ -111,6 +105,12 @@ $p = q \times 2^s + 1$ とします。 ($s \ge 1$, $q$は奇数)
 \begin{algorithm}                      
 \caption{単純化された Tonelli-Shanks のアルゴリズム}
 \label{alg1}
+入力: $p (\ge 3)$: 奇素数, $a (\not \equiv 0 \pmod p)$: 平方剰余
+
+出力: $r^2 \equiv a \pmod p$ を満たす$r$
+
+$p = q \times 2^s + 1$ とします。 ($s \ge 1$, $q$は奇数)
+
 1. $z^{(p-1)/2} \equiv -1 \pmod p$ となるような $z$ を選ぶ。このような $z$ は確率1/2でヒットするため、何個か試せば必ず見つかる。
 
 2. $m := s, c:\equiv z^q, t :\equiv a^q, r :\equiv a^{(q + 1)/2}$ とする。以降不変量 $\bm{r^2\equiv at \pmod p, t^{2^{m - 1}} \equiv 1 \pmod p, c^{2^{m-1}} \equiv -1 \pmod p}$ を崩さないように注意して操作する。
@@ -128,8 +128,8 @@ $p = q \times 2^s + 1$ とします。 ($s \ge 1$, $q$は奇数)
 
 
 
-C++での実装は以下のようになります。
-\lstinputlisting[caption=tonelli-shanks.cpp]{tonelli-shanks.cpp}
+C++での実装はソースコード\ref{alg:tonell-shanks}のようになります。
+\lstinputlisting[caption=tonelli-shanks.cpp,label=alg:tonell-shanks]{tonelli-shanks.cpp}
 
 例を挙げて見ていきましょう。
 $p = 41$, $a = 8$ とします。
@@ -240,5 +240,33 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
    \finiteField{M}(\sqrt{3}) \cong \finiteField{M^2}
   \end{displaymath}
   ここで、$\Frob(2+\sqrt{3}) = (2+\sqrt{3})^M \in \finiteField{M^2}$がどのような元になるかを考えてみましょう。$2+\sqrt{3}$の共役は自分自身と$2-\sqrt{3}$のみなので、$\Frob(2+\sqrt{3})=2-\sqrt{3}$でなければなりません。これから、$(2+\sqrt{3})^{M+1}=(2-\sqrt{3})(2+\sqrt{3})=1$であることが分かります。
+ \section{mod\_sqrt その2\level{4}}
+ http://pekempey.hatenablog.com/entry/2017/02/03/220150
+ \section{ペル方程式\level{4}}
+ \label{sec:pells-equation}
+ \begin{itembox}{例題}
+  一辺$a$メートルの正方形がある。この正方形から、一辺$b$メートルの正方形を$n$個切り出すことを考える。ただし、切り出されなかった部分の面積は、元の正方形の面積の50\%以上でなければならない。つまり、$a^2-nb^2 \ge a^2/2$が必要である。
+
+  ここで切り出されなかった部分のうち、$a^2$平方メートルの50\%を越える部分の面積
+  (つまり$(a^2/2-nb^2)$平方メートル)を最小化したい。
+  $n$が与えられるので、最小値を与える正の整数$a,b$を与えよ。
+
+  制約: $1 \le n \le 10000$
+
+  (出典: Aizu Online Judge 2116: Subdividing a Land (ACM-ICPC Japan Alumni Group Practice Contest, for World Finals, Tokyo, Japan, 2008-02-23),
+  \url{http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=2116})
+ \end{itembox}
+ まず、 $2n$が平方数の場合、$a = \sqrt{2n},b=1$が最小値0を与えることが自明です。
+ そうでない場合を考えます。$n$が十分に大きい場合には、(気の遠くなるような計算 TODO) $a^2 - 2nb^2 \ge 0$ならば$n$個詰めることが確実にできることが保証されるので、結局 $a^2 - 2nb^2 \ge 0$の条件つきで、$a^2 - 2nb^2$の最小値を与える$a,b$を計算すれば良いことが分かります。
+
+ ここで、以下の事実が知られています。
+ \begin{theorem}
+  \label{thm:pells-equation-has-solutions}
+  $n$が平方数でない正の整数のとき、方程式$x^2 - ny^2=1$は、正の整数解$(x,y)$を必ず持つ。
+ \end{theorem}
+ このような方程式を\emph{ペル方程式}\index{ぺるほうていしき@ペル方程式} (\emph{Pell's equation}) と呼び、
+ このような$(x,y)$のうち、$x$が最小のものを\emph{基本解}\index{きほんかい@基本解} (\emph{fundamental solution}) と呼びます。この問題では、基本解が計算できれば良いでしょう。
+
+ ペル方程式の基本解を計算するアルゴリズムを説明します。連分数を使う、以下のアルゴリズムが広く知られています。TODO
 \printindex
 \end{document}
