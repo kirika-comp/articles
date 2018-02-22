@@ -38,7 +38,7 @@
  二分累乗法は基本 TODO
   \subsection{群的構造を見つけて二分累乗する\level{2}}
   \begin{itembox}[l]{例題}
-   $\cos \theta = \frac{d}{l}$であるような$\theta$に対して、$\cos t\theta$は有理数であることが証明できる。$\cos t\theta = \frac{p}{q}$であるとき、$pq^{-1} \bmod (10^9+7)$を求めよ。
+   $\cos \theta = \frac{d}{l}$であるような$\theta$に対して、$\cos t\theta$は有理数であることが証明できる。$l\cos t\theta = \frac{p}{q}$であるとき、$pq^{-1} \bmod (10^9+7)$を求めよ。
    \begin{itemize}
     \item 部分点(15/100点): $t$は2冪である。つまり、ある0以上の整数$p$について$t=2^p$。
     \item 満点(100点): $1 \le t \le 10^{18}$, $t$は整数。
@@ -58,18 +58,17 @@
   \end{displaymath}
   これにより掛け算、それゆえ冪乗が、整数ペアの上の演算として実装できます。どのようにするかみていきましょう。
 
-  まず、$\cos\theta + i\sin\theta$はもちろん、$\langle \cos\theta,1\rangle=\langle d/l,1\rangle$として表現されます。掛け算ですが、
+  まず、$\cos\theta + i\sin\theta$はもちろん、$\langle \cos\theta,1\rangle=\langle d/l,1\rangle$として表現されます。掛け算についてですが、
   \begin{displaymath}
    (a,b) \times (c,d) = (a+ib\sin\theta)(c+id\sin\theta)
    =(ac+bd(\sin^2\theta-1))+i(ad+bc)\sin\theta
    =\langle ac+bd(\sin^2\theta-1), ad+bc\rangle
   \end{displaymath}
   より、問題なく実装することができます。これによりべき乗も問題なく実装でき、問題が解けます。
-\begin{verbatim}
+\begin{lstlisting}[caption=BROCLK.cpp,label=BROCLK]
 #include<iostream>
 using namespace std;
 typedef long long lint;
-typedef pair<int,int>pii;
 typedef pair<lint,lint>pll;
 const lint mod=1e9+7;
 
@@ -112,7 +111,7 @@ int main(){
     cout<<ans*l%mod<<endl;
   }
 }
-\end{verbatim}
+\end{lstlisting}
  \section{${}\bmod p$ のアルゴリズム}
   \subsection{基礎知識}
   \label{subsec:group-preliminaries}
@@ -176,7 +175,7 @@ $p = q \times 2^s + 1$ とします。 ($s \ge 1$, $q$は奇数)
 
 
 C++での実装は以下のようになります。
-\begin{verbatim}
+\begin{lstlisting}
 #include<random>
 using namespace std;
 typedef long long lint;
@@ -212,8 +211,7 @@ lint simplified_tonelli_shanks(lint p,lint a){
   }
   return r;
 }
-	
-\end{verbatim}
+\end{lstlisting}
 
 例を挙げて見ていきましょう。
 $p = 41$, $a = 8$ とします。
