@@ -33,6 +33,86 @@
   \begin{itembox}[l]{COLUMN}
    専門用語を使うと、これは環準同型$\Z \to \Z/(10^9+7)\Z$が、体の準同型$\Q \to \Z/(10^9+7)\Z$ に拡張できる、ということができます(ただし、細かい点を除く)。興味のある人は、調べてみてください。
   \end{itembox}
+ \section{二分累乗法\level{1}}
+ \label{sec:squaring-by-exponentiation}
+ 二分累乗法は基本 TODO
+  \subsection{群的構造を見つけて二分累乗する\level{2}}
+  \begin{itembox}[l]{例題}
+   $\cos \theta = \frac{d}{l}$であるような$\theta$に対して、$\cos t\theta$は有理数であることが証明できる。$\cos t\theta = \frac{p}{q}$であるとき、$pq^{-1} \bmod (10^9+7)$を求めよ。
+   \begin{itemize}
+    \item 部分点(15/100点): $t$は2冪である。つまり、ある0以上の整数$p$について$t=2^p$。
+    \item 満点(100点): $1 \le t \le 10^{18}$, $t$は整数。
+   \end{itemize}
+   (出典: CodeChef February Challenge 2018 (FEB18) >> Broken Clock (BROCLK))
+  \end{itembox}
+  部分点解法は、2倍角の公式$\cos 2\theta = 2\cos^2\theta - 1$を利用して、$p$回の計算を行うことでできます。
+
+  問題は満点解法の方で、愚直にやると$t$倍角の公式が必要になってきて、不可能とは言わないまでも面倒です。そこで、ド・モアブルの公式 (de Moivre's formula)
+  \begin{displaymath}
+   \cos t\theta + i\sin t\theta = (\cos\theta + i\sin\theta)^t
+  \end{displaymath}
+  を利用して、強引に冪乗公式に持っていくことを考えましょう。
+  式の形から、$\cos \theta + i\sin\theta$なる数の計算、およびそれの累乗の計算ができれば良いことになります。ここで、以下のようにペアを用いて数を表現することにします:
+  \begin{displaymath}
+   \langle a, b\rangle \mapsto a + ib\sin \theta
+  \end{displaymath}
+  これにより掛け算、それゆえ冪乗が、整数ペアの上の演算として実装できます。どのようにするかみていきましょう。
+
+  まず、$\cos\theta + i\sin\theta$はもちろん、$\langle \cos\theta,1\rangle=\langle d/l,1\rangle$として表現されます。掛け算ですが、
+  \begin{displaymath}
+   (a,b) \times (c,d) = (a+ib\sin\theta)(c+id\sin\theta)
+   =(ac+bd(\sin^2\theta-1))+i(ad+bc)\sin\theta
+   =\langle ac+bd(\sin^2\theta-1), ad+bc\rangle
+  \end{displaymath}
+  より、問題なく実装することができます。これによりべき乗も問題なく実装でき、問題が解けます。
+\begin{verbatim}
+#include<iostream>
+using namespace std;
+typedef long long lint;
+typedef pair<int,int>pii;
+typedef pair<lint,lint>pll;
+const lint mod=1e9+7;
+
+lint powmod(lint x,lint e){
+  lint c=1;
+  for(int i=63;i>=0;--i){
+    c=c*c%mod;
+    if(e&1LL<<i)c=c*x%mod;
+  }
+  return c;
+}
+
+pll mul_pll(pll a,pll b,lint c){
+  lint x=a.first*b.first%mod;
+  lint nx=a.second*b.second%mod;
+  x=(x+nx*c)%mod;
+  lint y=(a.first*b.second+a.second*b.first)%mod;
+  return pll(x,y);
+}
+
+pll pow_pll(pll a,lint e,lint c){
+  pll p(1,0);
+  for(int i=63;i>=0;--i){
+    p=mul_pll(p,p,c);
+    if(e&1LL<<i)p=mul_pll(p,a,c);
+  }
+  return p;
+}
+
+int main(){
+  int tt;
+  cin>>tt;
+  while(tt--){
+    lint l,d,t;
+    cin>>l>>d>>t;
+    lint cos=d*powmod(l,mod-2)%mod;
+    lint s2=(cos*cos%mod)+mod-1;
+    s2%=mod;
+    lint ans=pow_pll(pll(cos,1),t,s2).first;
+    cout<<ans*l%mod<<endl;
+  }
+}
+\end{verbatim}
  \section{${}\bmod p$ のアルゴリズム}
   \subsection{基礎知識}
   \label{subsec:group-preliminaries}
