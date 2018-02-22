@@ -6,13 +6,21 @@
 \makeindex
 \begin{document}
 \maketitle
+ \section*{謝辞}
+ \label{sec:acknowledgements}
+ 全ての助けの中で、dr.ken (@drken1215) によるものが一番大きいです。彼の協力により、問題がたくさん集まりました。
+ これを読んでくださる読者の方にも感謝の念を禁じえません。
  \section{はじめに}
  これは、競技プログラミングで使える整数論のテクニックをまとめた文章です。
  AtCoder の青から赤下位程度をターゲットにしています。
 
  整数論の問題は得てして「地頭ゲー」などと呼ばれやすいですが、実はそうではなく、知識を持っていることで解ける問題が多いです。しかし、その知識については、日本の競技プログラマーたちには、
  あまり知られていないように見えます。そのため、この文章を書くことにしました。
- 
+
+ 基本的に、実際に出題されている問題で利用されるテクニックを、実際の問題と共に紹介するという方式で書いていきます。そのため、ネタバレは非常に多いです。
+
+ 各セクションにはレベルを振ってあります。筆者が感じたおよその難易度を表しています。
+
  コメント等はTwitter (@kirika\_comp) までお願いします。
  \section{mod $p$上の計算}
  \label{sec:mod-p-arithmetic}
@@ -242,6 +250,8 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
   ここで、$\Frob(2+\sqrt{3}) = (2+\sqrt{3})^M \in \finiteField{M^2}$がどのような元になるかを考えてみましょう。$2+\sqrt{3}$の共役は自分自身と$2-\sqrt{3}$のみなので、$\Frob(2+\sqrt{3})=2-\sqrt{3}$でなければなりません。これから、$(2+\sqrt{3})^{M+1}=(2-\sqrt{3})(2+\sqrt{3})=1$であることが分かります。
  \section{mod\_sqrt その2\level{4}}
  http://pekempey.hatenablog.com/entry/2017/02/03/220150
+
+ Cipolla のアルゴリズム
  \section{ペル方程式\level{4}}
  \label{sec:pells-equation}
  \begin{itembox}{例題}
