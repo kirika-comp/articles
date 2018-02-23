@@ -1,5 +1,5 @@
 
-整数論pdfは、[https://github.com/kirika-comp/articles/releases](https://github.com/kirika-comp/articles/releases) に置いてあります。
+整数論pdfのドラフトは、[https://github.com/kirika-comp/articles/blob/pre-releases/pre-seisuuron.pdf](https://github.com/kirika-comp/articles/blob/pre-releases/pre-seisuuron.pdf) に置いてあります。
 また自分でコンパイルすることもできます。
 
 ```
