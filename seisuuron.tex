@@ -54,7 +54,7 @@
    答えは分数$A/B$ になる。このとき、$B$ の mod $(10^9+7)$ での逆元を$B^{-1}$ として、$A \times B^{-1} \bmod (10^9 + 7)$を出力せよ。
   \end{center}
   これも、特別な配慮などはせずに、途中結果をmod $(10^9+7)$ で保持しておくだけで、計算が正しく行えます。
-  \begin{itembox}[l]{例題}
+  \begin{itembox}[l]{問題}
    \begin{itemize}
     \item Codeforces Round \#465 (Div. 2) D. Fafa and Ancient Alphabet
    \end{itemize}
@@ -63,10 +63,10 @@
    専門用語を使うと、これは環準同型$\Z \to \Z/(10^9+7)\Z$が、体の準同型$\Q \to \Z/(10^9+7)\Z$ に拡張できる、ということができます(ただし、細かい点を除く)。興味のある人は、調べてみてください。
   \end{itembox}
  \section{二分累乗法\level{1}}
- \label{sec:squaring-by-exponentiation}
+ \label{sec:exponentiation-by-squaring}
  二分累乗法は基本 TODO
   \subsection{群的構造を見つけて二分累乗する\level{2}}
-  \begin{itembox}[l]{例題}
+  \begin{itembox}[l]{問題}
    $\cos \theta = \frac{d}{l}$であるような$\theta$に対して、$\cos t\theta$は有理数であることが証明できる。$l\cos t\theta = \frac{p}{q}$であるとき、$pq^{-1} \bmod (10^9+7)$を求めよ。
    \begin{itemize}
     \item 部分点(15/100点): $t$は2冪である。つまり、ある0以上の整数$p$について$t=2^p$。
@@ -94,7 +94,27 @@
    =\langle ac+bd(\cos^2\theta-1), ad+bc\rangle
   \end{displaymath}
   より、問題なく実装することができます。これによりべき乗も問題なく実装でき、問題が解けます。
-\lstinputlisting[caption=BROCLK.cpp,label=BROCLK]{FEB18-BROCLK.cpp}
+  \lstinputlisting[caption=BROCLK.cpp,label=BROCLK]{FEB18-BROCLK.cpp}
+  \subsection{うまい変形で除算を回避する\level{2}}
+  \label{subsec:avoiding-division}
+  \begin{itembox}[l]{問題}
+   整数$A$が、次のような10進表記で与えられる。
+   \begin{displaymath}
+    (A)_{10} = a_1^{L_1} \cdot a_2^{L_2} \cdot \dots \cdot a_N^{L_N}
+   \end{displaymath}
+   ここで、$a_i$は10進表記で与えられた整数、$L_i$は整数である。
+   また$a_i^{L_i}$は、$a_i$を文字列としてみなして、$L_i$個連結したものを表し、$s \cdot t$ は文字列 $s$, $t$ の連結を表す。
+   このとき、$A$を$B$で割った余りを求めよ。
+
+   制約: $1 \le N \le 10000, 1\le a_i \le 10^9, 1 \le L_i \le 10^9$
+   \begin{itemize}
+    \item 部分点 (99/100点): $B = 10^9+7$。
+    \item 満点 (100点): $1 \le B \le 10^9 + 7$。$B$ は素数とは限らない。
+   \end{itemize}
+
+   (出典: ARC020 C - A mod B Problem)
+  \end{itembox}
+  $B$が素数の場合、$A$は等比数列の総和の公式を使って、閉じた式の形で書けるので、計算することは簡単です。問題は$B$が素数でない場合です。TODO
  \section{${}\bmod p$ のアルゴリズム}
   \subsection{基礎知識}
   \label{subsec:group-preliminaries}
@@ -256,7 +276,7 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
    $x, \Frob(x), \Frob^2(x), \ldots, \Frob^{e-1}(x)$ は全て共役(TODO definition)。つまり、TODO。
   \end{proposition}
   \subsection{応用例}
-  \begin{itembox}[l]{例題}
+  \begin{itembox}[l]{問題}
    数列 $a_0 = 2, a_{n+1} = a_n(a_n+4)$がある。このとき、素数$M$に対して、$a_N \bmod M$ を求めよ。
 
    (出典: yukicoder No.613 Solitude by the window)
@@ -280,7 +300,7 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
  Cipolla のアルゴリズム
  \section{ペル方程式\level{4}}
  \label{sec:pells-equation}
- \begin{itembox}{例題}
+ \begin{itembox}{問題}
   一辺$a$メートルの正方形がある。この正方形から、一辺$b$メートルの正方形を$n$個切り出すことを考える。ただし、切り出されなかった部分の面積は、元の正方形の面積の50\%以上でなければならない。つまり、$a^2-nb^2 \ge a^2/2$が必要である。
 
   ここで切り出されなかった部分のうち、$a^2$平方メートルの50\%を越える部分の面積
@@ -328,7 +348,7 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
  \end{example}
 
  以下の問題を考えてみましょう。
- \begin{itembox}[l]{例題}
+ \begin{itembox}[l]{問題}
   $(P, Q)$-サンタがいる。$(P, Q)$サンタは最初原点におり、$(x, y)$からは$(x \pm P, y \pm Q)$ または $(x \pm Q, y\pm P)$ の8種類の点に移動できる。
   $N$人の子供の座標$(X_i,Y_i)$が与えられるので、$(P, Q)$-サンタが到達できる子供の数を求めよ。
 
@@ -348,7 +368,7 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
  は、他でもないイデアル$(P+Q\sqrt{-1},P-Q\sqrt{-1})$であり、$\Z[\sqrt{-1}]$がPIDであるという性質から、$P+Q\sqrt{-1}$と$P-Q\sqrt{-1}$の最大公約数を$\gamma$と置くと、このイデアルは$\gamma$によって生成される単項イデアル$(\gamma)$です。よって、$\gamma | X_i+Y_i\sqrt{-1}$かどうかの判定を行うことで、この問題が解けました。
 
  また、以下の問題を考えてみましょう。
- \begin{itembox}[l]{例題}
+ \begin{itembox}[l]{問題}
   $N$個の非負整数$A_i$が黒板に書かれている。
   以下の操作を何度でも行える:
   \begin{itemize}
