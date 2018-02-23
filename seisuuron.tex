@@ -114,7 +114,22 @@
 
    (出典: ARC020 C - A mod B Problem)
   \end{itembox}
-  $B$が素数の場合、$A$は等比数列の総和の公式を使って、閉じた式の形で書けるので、計算することは簡単です。問題は$B$が素数でない場合です。TODO
+  $B$が素数の場合、$A$は等比数列の総和の公式を使って、以下のような閉じた式の形で書けるので、計算することは簡単です。ここで、$b_i$は$a_i$の桁数です。
+  \begin{displaymath}
+   A = a_N f(10^{b_N},l_N)+10^{b_N \times l_N}(a_{N-1}f(10^{b_{N-1}},l_{N-1}) + 10^{b_{N-1} \times l_{N-1}} ( \ldots)),
+   f(y,z) = 1+y+\cdots+y^{z-1} = \frac{y^z-1}{y-1}
+  \end{displaymath}
+  問題は$B$が素数でない場合です。
+  $f(y,z)$の計算の中で、$y-1$による除算を行っていますが、$y-1$と$B$が互いに素でない場合に、これは失敗します。
+  これを回避するために、$y^z$を二分累乗法で計算するのを諦め、$f(y,z)$を直接二分累乗法に似た方法で計算することを考えましょう。以下の等式が成立します:
+  \begin{displaymath}
+   f(y,2z) = 1+y+\cdots+y^{2z-1}=(1+y+\cdots+y^{z-1})(1+y^z)=(1+y^z)f(y,z)
+  \end{displaymath}
+  \begin{displaymath}
+   f(y,z+1)=1+y+\cdots+y^{z}=1+y(1+y+\cdots+y^{z-1})=1+yf(y,z)
+  \end{displaymath}
+  これによって、$z$の偶奇に応じて場合分けしながら再帰を行うことで、$f(y,z)$の値を除算なしで計算することができます。
+  ソースコードTODO
  \section{${}\bmod p$ のアルゴリズム}
   \subsection{基礎知識}
   \label{subsec:group-preliminaries}
