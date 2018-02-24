@@ -237,7 +237,7 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
   \label{subsec:legendre-symbol}
   ルジャンドル記号\index{るじゃんどるきごう@ルジャンドル記号}とは、以下で定義されるものです。
   \begin{displaymath}
-   \legendre{a}{p} = \begin{cases}
+   \legendre{a}{p} := \begin{cases}
 		      1 & \mbox{$a$が平方剰余のとき} \\
 		      -1 & \mbox{$a$が平方非剰余のとき}\\
 		      0 & \mbox{$a \equiv 0 \pmod p$のとき}
@@ -255,6 +255,9 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
     \legendre{a}{p} \legendre{b}{p} = \legendre{ab}{p}
    \end{displaymath}
   \end{proposition}
+  \begin{corollary}
+   対応 $a \mapsto \legendre{a}{p}$ は群準同型$(\Z/p\Z)^* \to \{+1,-1\}$ を定める。
+  \end{corollary}
   \subsection{平方剰余の相互法則}
   以下の定理が成り立つことが知られています。
   \begin{theorem}[平方剰余の相互法則]
@@ -302,6 +305,8 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
    が得られます。
   \end{example}
   \subsection{2次体}
+  \label{subsec:quadratic-field}
+  有理数体 $\Q$ に有理数の平方根$\sqrt{d}$を添加した体 $\Q(\sqrt{d})$ を、\emph{2次体}\index{にじたい@2次体} (\emph{quadratic field})と呼びます。
   \subsection{有限体}
   任意の素数$p$と正の整数$e$に対して、$p^e$要素の有限体が存在します。逆に、有限体の要素数は、必ず$p^e$ の形で表せます。このような有限体は、一意に存在します。これを$\finiteField{p^e}$と表記することにします。
   \subsection{フロベニウス写像}
