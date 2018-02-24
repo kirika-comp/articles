@@ -60,11 +60,13 @@
    \end{itemize}
   \end{itembox}
   \begin{itembox}[l]{COLUMN}
-   専門用語を使うと、これは環準同型$\Z \to \Z/(10^9+7)\Z$が、体の準同型$\Q \to \Z/(10^9+7)\Z$ に拡張できる、ということができます(ただし、細かい点を除く)。興味のある人は、調べてみてください。
+   専門用語を使うと、これは素数 $p$ について自然に定まる環準同型$\Z \to \Z/p\Z$が、環準同型$\Z_p \to \Z/p\Z$ に拡張できる、ということができます(ただし、$\Z_p$は$p$-進整数環)。興味のある人は、調べてみてください。
   \end{itembox}
  \section{二分累乗法\level{1}}
  \label{sec:exponentiation-by-squaring}
  二分累乗法は基本 TODO
+
+ $e$乗が$2\log_2 e$回以内の掛け算で計算できます。
   \subsection{群的構造を見つけて二分累乗する\level{2}}
   \begin{itembox}[l]{問題}
    $\cos \theta = \frac{d}{l}$であるような$\theta$に対して、$\cos t\theta$は有理数であることが証明できる。$l\cos t\theta = \frac{p}{q}$であるとき、$pq^{-1} \bmod (10^9+7)$を求めよ。
@@ -237,11 +239,22 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
   \begin{displaymath}
    \legendre{a}{p} = \begin{cases}
 		      1 & \mbox{$a$が平方剰余のとき} \\
-		      -1 & \mbox{$a$が平方非剰余のとき}
+		      -1 & \mbox{$a$が平方非剰余のとき}\\
+		      0 & \mbox{$a \equiv 0 \pmod p$のとき}
 		     \end{cases}
   \end{displaymath}
 
-  TODO 性質
+  \begin{proposition}
+   \begin{displaymath}
+     \legendre{a}{p} \equiv a^{\frac{p-1}{2}} \pmod p
+    \end{displaymath}
+  \end{proposition}
+  \begin{proposition}
+   ルジャンドル記号は乗法的である。つまり、
+   \begin{displaymath}
+    \legendre{a}{p} \legendre{b}{p} = \legendre{ab}{p}
+   \end{displaymath}
+  \end{proposition}
   \subsection{平方剰余の相互法則}
   以下の定理が成り立つことが知られています。
   \begin{theorem}[平方剰余の相互法則]
