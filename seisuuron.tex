@@ -77,9 +77,14 @@
  \label{sec:exponentiation-by-squaring}
  二分累乗法とよばれる基本テクニックがあります。
 
- $e$乗は$2\log_2 e$回以内の掛け算で計算できます。この方法を\emph{二分累乗法}\index{にぶんるいじょうほう@二分累乗法} (\emph{exponentiation by squaring}) と呼びます。
+ ある種の「掛け算」$x \cdot y$ が定義されているような代数的構造 (\emph{モノイド}と呼びます) の上で、$x$ の $e$乗 $x^e = x \cdot \cdots \cdot x$は$2\log_2 e$回以内の掛け算で計算できます。この方法を\emph{二分累乗法}\index{にぶんるいじょうほう@二分累乗法} (\emph{exponentiation by squaring}) と呼びます。
 
- 二分累乗法には2種類の方法があります。一つ目は、$e$の2進表記の小さい桁の方から計算をする方法で、もう一つは$e$ の2進表記の大きい桁の方から計算をする方法です。TODO
+ 二分累乗法には2種類の方法があります。一つ目は、$e$の2進表記の小さい桁の方から計算をする方法で、もう一つは$e$ の2進表記の大きい桁の方から計算をする方法です。整数のmodつき掛け算を例にして、両方のアルゴリズムを紹介します。
+
+ まず一つ目から紹介します。ソースコード\ref{powmod-1.cpp}に実装を載せました。
+ ループの各イテレーション終了時に$prod * cur^e = (answer)$ が成立していることに注意しましょう。最終的に$e = 0$ となって $prod$ に答えが入ります。
+ \lstinputlisting[caption=powmod-1.cpp,label=powmod-1.cpp]{powmod-1.cpp}
+ 2つめTODO
   \subsection{群的構造を見つけて二分累乗する\level{2}}
   \begin{itembox}[l]{問題}
    $\cos \theta = \frac{d}{l}$であるような$\theta$に対して、$\cos t\theta$は有理数であることが証明できる。$l\cos t\theta = \frac{p}{q}$であるとき、$pq^{-1} \bmod (10^9+7)$を求めよ。
