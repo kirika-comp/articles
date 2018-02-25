@@ -82,9 +82,12 @@
  二分累乗法には2種類の方法があります。一つ目は、$e$の2進表記の小さい桁の方から計算をする方法で、もう一つは$e$ の2進表記の大きい桁の方から計算をする方法です。整数のmodつき掛け算を例にして、両方のアルゴリズムを紹介します。
 
  まず一つ目から紹介します。ソースコード\ref{powmod-1.cpp}に実装を載せました。
- ループの各イテレーション終了時に$prod * cur^e = (answer)$ が成立していることに注意しましょう。最終的に$e = 0$ となって $prod$ に答えが入ります。
+ ループの各イテレーション終了時に$prod * cur^e = (answer) = x^e$ が成立していることに注意しましょう。最終的に$e = 0$ となって $prod$ に答えが入ります。
  \lstinputlisting[caption=powmod-1.cpp,label=powmod-1.cpp]{powmod-1.cpp}
- 2つめTODO
+
+ 次に二つ目を紹介します。$e$ の上の桁から見ていくアルゴリズムです。
+ ループの各イテレーション終了時に$prod^{2^i} * x^{e \% 2^i} = (answer) = x^e$ が成り立つことに注意しましょう。
+ \lstinputlisting[caption=powmod-2.cpp,label=powmod-2.cpp]{powmod-2.cpp}
   \subsection{群的構造を見つけて二分累乗する\level{2}}
   \begin{itembox}[l]{問題}
    $\cos \theta = \frac{d}{l}$であるような$\theta$に対して、$\cos t\theta$は有理数であることが証明できる。$l\cos t\theta = \frac{p}{q}$であるとき、$pq^{-1} \bmod (10^9+7)$を求めよ。
