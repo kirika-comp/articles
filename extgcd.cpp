@@ -22,6 +22,6 @@ int main(){
   cout<<a<<" "
       <<b<<" "<<x<<" "<<y
       <<endl;
-	cout<<g<<endl;
+  cout<<g<<endl;
 				    
 }
