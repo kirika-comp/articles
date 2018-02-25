@@ -437,7 +437,19 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
 
   (出典: ARC084 F - XorShift)
  \end{itembox}
- これは、PID $\finiteField{2}[x]$の上の最大公約数を求めれば解けます。この場合、最大公約数の計算一回には$O(|A_i|^2)$時間かかるので、全体の計算量は$O(N|A_i|^2)$となり、十分間に合います。 TODO detailed explanation
+ まず、演算が2倍とxorなので、整数を以下のようにして、$\finiteField{2}[x]$ の元
+ (つまり、$\finiteField{2}$ 係数の多項式) として表すという発想が自然です:
+ \begin{displaymath}
+  t = b_u 2^u + b_{u-1}2^{u-1} + \cdots + b_1 2 + b_0 \mapsto
+  b_u x^u + b_{u-1} x^{u-1} + \cdots b_1 x + b_0
+ \end{displaymath}
+ 多項式の上の演算として考えると、2倍する操作は$x$をかける操作、xorをとる操作は多項式の足し算です。 ($\finiteField{2}$ の上の足し算がxorであることに注意してください。)
+ $\finiteField{2}[x]$ はPIDなので、この問題は、$\finiteField{2}[x]$の上の最大公約数が計算できれば解けます。
+ つまり、整数$t$が黒板に書き込めることと、以下が同値です:
+ \begin{displaymath}
+  t \in (A_1, \ldots, A_N) = (\gcd(A_1, \ldots, A_N))
+ \end{displaymath}
+ この場合、最大公約数の計算一回には$O(|A_i|^2)$時間かかるので、全体の計算量は$O(N|A_i|^2)$となり、十分間に合います。
 \printindex
 \bibliographystyle{jplain}
 \bibliography{./references}
