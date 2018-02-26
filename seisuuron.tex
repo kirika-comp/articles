@@ -300,7 +300,23 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
    P(p - 1) = (t + 1) \times (2t + 1) \times \cdots \times ((p - 1)t + 1)
    \equiv -t^{p-1} + 1 \pmod p
   \end{displaymath}
-  残りTODO
+  $(kt + 1) \bmod p$ は周期$p$なので、$P(pk) \equiv P(p)^k = (-t^{p-1}+1)^k \pmod p$
+  が分かります。
+
+  よって、$n = qp + r$ ($0 \le r < p$) としたとき、$P(n) \equiv P(qp)P(r) \equiv (-t^{p-1}+1)^qP(r) \pmod p$が計算できればよいです。
+
+  $(-t^{p-1}+1)^q$ について考えましょう。今は$p$の倍数かどうかにだけ関心があるので、$(t^{p-1}+1)^q$ を考えても同じです。ここで、次のような事実が実験によって分かります:
+  \begin{center}
+   非負整数$a$ の $p$進表記を$a = (d_{e-1}d_{e-2}\cdots d_1d_0)_p$とすると、$(x+1)^a \bmod p$の0でない係数は、ちょうど$(d_{e-1} + 1) \times (d_{e-2} + 1) \times \cdots \times (d_0 + 1)$個ある。
+  \end{center}
+  これに$x = t^{p-1}$を代入すると、$q = (d_{e-1}d_{e-2}\cdots d_1d_0)_p$として、
+  $(-t^{p-1}+1)^q \bmod p$ の0でない係数は$(d_{e-1} + 1) \times (d_{e-2} + 1) \times \cdots \times (d_0 + 1)$個あって、しかもそれぞれの次数は$p-1$次以上離れていることが分かります。$p$進表記を計算する方法は色々ありますが、$n$の桁数が小さいので、$O((\log n)^2)$時間かけて愚直に多倍長整数演算をすれば良いでしょう。
+
+  次に$P(r)$ですが、$P(r)$は$r$次なので、$r < p - 1$ならば$(-t^{p-1}+1)^q$と干渉しないことが分かります。よって答えは$(d_{e-1} + 1) \times (d_{e-2} + 1) \times \cdots \times (d_0 + 1) \times (P(r)\bmod p\mbox{の0でない係数})$であることが分かります。
+  $r = p - 1$の時は、$P(r) \equiv P(p) \pmod p$ より、$n = (q + 1)p$の時と同じ答えになることが分かります。
+
+  以上から$O(p(\log p)^2 + (\log n)^2)$時間の解法が得られました。以下にソースコードを載せます。\url{https://www.codechef.com/viewsolution/17544518} です。
+  \lstinputlisting[caption=FEB18-LUCASTH.cpp,label=FEB18-LUCASTH.cpp]{FEB18-LUCASTH.cpp}
  \section{平方剰余の相互法則\level{4}}
   \subsection{ルジャンドル記号}
   \label{subsec:legendre-symbol}
