@@ -257,6 +257,50 @@ $m := 3, c :\equiv 7^5 = 16807 \equiv 38, t :\equiv 8^5 = 32768 \equiv 9, r \equ
  群論的なアプローチをすると、もっと綺麗な見方が得られます。
 $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-Sylow部分群\index{Sylowぶぶんぐん@Sylow部分群}) $H = \Z/2^s\Z$ を考えます。このとき、$z$ と $t$ は $H$ の元であることがわかります。$t$が$1$になるように、うまく$H^2$の元で調整しているわけです。
 \end{itembox}
+ \section{多項式を使うテク\level{4}}
+ \label{sec:technique-using-polynomials}
+  \subsection{FFT}
+  TODO説明
+  \subsection{フェルマーの小定理}
+  以下の等式が成り立ちます:
+  \begin{displaymath}
+   (x+1) \times (x+2) \times \cdots \times (x + (p - 1)) \equiv x^{p-1} - 1 \pmod p
+  \end{displaymath}
+  説明TODO
+
+  この事実を応用して解ける問題を紹介します。以下の問題を考えましょう。
+  \begin{itembox}[l]{問題}
+   正の整数$n$と素数$p$が与えられる。$[n] := \{1,\ldots, n\}$ として、整数$k$に対して$f(n, k)$ を以下で定める:
+   \begin{displaymath}
+    f(n, k) := \sum_{S \subseteq [n], |S| = k} \prod_{x \in S} x
+   \end{displaymath}
+   このとき、$p \not \mid f(n, k)$ となるような$0 \le k \le n$ の個数を、${} \bmod 10^9+7$ で求めよ。(テストケースは$T$ケース与えられる。)
+
+   制約: $1 \le T \le 4, 2 \le p \le 100000$, $p$は素数
+   \begin{itemize}
+    \item 部分点(10/100点): $n \le 5000$
+    \item 部分点(50/100点): $n \le 100000$
+    \item 満点(100点): $n < 10^{501}$
+   \end{itemize}
+
+   (出典: CodeChef February Challenge 2018 (FEB18) >> Lucas Theorem (LUCASTH))
+  \end{itembox}
+  簡単な式変形、DP、あるいは実験などで、
+  \begin{displaymath}
+   f(n, k) = ((t + 1) \times (2t + 1) \times \cdots \times (nt + 1) \mbox{の$t^k$の係数})
+  \end{displaymath}
+  であることがわかります。
+  $P(n) := (t + 1) \times (2t + 1) \times \cdots \times (nt + 1)$と置きましょう。
+  $P(n)$ の係数を愚直に計算することで、$O(n^2)$解法が得られます (10/100点)。
+
+  これを高速化することを考えましょう。多項式の乗算を高速化したいので、FFTを使うことが思いつきます。分割統治で計算すれば、$O(n (\log n)^2)$解法が得られます (50/100点)。
+
+  満点解法について考えましょう。先ほど紹介したフェルマーの小定理を少し修正することで、以下が分かります:
+  \begin{displaymath}
+   P(p - 1) = (t + 1) \times (2t + 1) \times \cdots \times ((p - 1)t + 1)
+   \equiv -t^{p-1} + 1 \pmod p
+  \end{displaymath}
+  残りTODO
  \section{平方剰余の相互法則\level{4}}
   \subsection{ルジャンドル記号}
   \label{subsec:legendre-symbol}
