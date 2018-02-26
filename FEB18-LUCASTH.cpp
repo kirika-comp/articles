@@ -13,7 +13,6 @@ namespace math314{
 
 #define FOR(i,n) for(int i = 0; i < (n); i++)
 #define sz(c) ((int)(c).size())
-#define ten(x) ((int)1e##x)
 
   template<class T> T extgcd(T a, T b, T& x, T& y) { for (T u = y = 1, v = x = 0; a;) { T q = b / a; swap(x -= q * u, u); swap(y -= q * v, v); swap(b -= q * a, a); } return b; }
   template<class T> T mod_inv(T a, T m) { T x, y; extgcd(a, m, x, y); return (m + x % m) % m; }
@@ -172,23 +171,18 @@ lint f(string n,lint p){
   if(dig[0]==p-1){
     //propagate
     dig[0]=0;
-    int car=1,pos=1;
-    while(car>0&&pos<(int)dig.size()){
-      dig[pos]++;
-      car=0;
-      if(dig[pos]>=p){
-	dig[pos]=0;
-	car=1;
-      }
-      pos++;
+    int car=1;
+    for(int pos=1;pos<(int)dig.size();++pos){
+      dig[pos]+=car;
+      car=dig[pos]/p;
+      dig[pos]%=p;
     }
     if(car>0)dig.push_back(car);
   }
   vector<lint> ans=g(p,1,dig[0]);
   lint ret=0;
-  rep(i,dig[0]+1){
+  rep(i,dig[0]+1)
     if(ans[i]!=0)ret++;
-  }
   rep(i,dig.size()-1)
     ret=ret*(dig[i+1]+1)%mod;
   return ret;
