@@ -257,66 +257,6 @@ $m := 3, c :\equiv 7^5 = 16807 \equiv 38, t :\equiv 8^5 = 32768 \equiv 9, r \equ
  群論的なアプローチをすると、もっと綺麗な見方が得られます。
 $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-Sylow部分群\index{Sylowぶぶんぐん@Sylow部分群}) $H = \Z/2^s\Z$ を考えます。このとき、$z$ と $t$ は $H$ の元であることがわかります。$t$が$1$になるように、うまく$H^2$の元で調整しているわけです。
 \end{itembox}
- \section{多項式を使うテク\level{4}}
- \label{sec:technique-using-polynomials}
-  \subsection{FFT}
-  TODO説明
-  \subsection{フェルマーの小定理}
-  以下の等式が成り立ちます:
-  \begin{displaymath}
-   (x+1) \times (x+2) \times \cdots \times (x + (p - 1)) \equiv x^{p-1} - 1 \pmod p
-  \end{displaymath}
-  説明TODO
-
-  この事実を応用して解ける問題を紹介します。以下の問題を考えましょう。
-  \begin{itembox}[l]{問題}
-   正の整数$n$と素数$p$が与えられる。$[n] := \{1,\ldots, n\}$ として、整数$k$に対して$f(n, k)$ を以下で定める:
-   \begin{displaymath}
-    f(n, k) := \sum_{S \subseteq [n], |S| = k} \prod_{x \in S} x
-   \end{displaymath}
-   このとき、$p \not \mid f(n, k)$ となるような$0 \le k \le n$ の個数を、${} \bmod 10^9+7$ で求めよ。(テストケースは$T$ケース与えられる。)
-
-   制約: $1 \le T \le 4, 2 \le p \le 100000$, $p$は素数
-   \begin{itemize}
-    \item 部分点(10/100点): $n \le 5000$
-    \item 部分点(50/100点): $n \le 100000$
-    \item 満点(100点): $n < 10^{501}$
-   \end{itemize}
-
-   (出典: CodeChef February Challenge 2018 (FEB18) >> Lucas Theorem (LUCASTH))
-  \end{itembox}
-  簡単な式変形、DP、あるいは実験などで、
-  \begin{displaymath}
-   f(n, k) = ((t + 1) \times (2t + 1) \times \cdots \times (nt + 1) \mbox{の$t^k$の係数})
-  \end{displaymath}
-  であることがわかります。
-  $P(n) := (t + 1) \times (2t + 1) \times \cdots \times (nt + 1)$と置きましょう。
-  $P(n)$ の係数を愚直に計算することで、$O(n^2)$解法が得られます (10/100点)。
-
-  これを高速化することを考えましょう。多項式の乗算を高速化したいので、FFTを使うことが思いつきます。分割統治で計算すれば、$O(n (\log n)^2)$解法が得られます (50/100点)。
-
-  満点解法について考えましょう。先ほど紹介したフェルマーの小定理を少し修正することで、以下が分かります:
-  \begin{displaymath}
-   P(p - 1) = (t + 1) \times (2t + 1) \times \cdots \times ((p - 1)t + 1)
-   \equiv -t^{p-1} + 1 \pmod p
-  \end{displaymath}
-  $(kt + 1) \bmod p$ は周期$p$なので、$P(pk) \equiv P(p)^k = (-t^{p-1}+1)^k \pmod p$
-  が分かります。
-
-  よって、$n = qp + r$ ($0 \le r < p$) としたとき、$P(n) \equiv P(qp)P(r) \equiv (-t^{p-1}+1)^qP(r) \pmod p$が計算できればよいです。
-
-  $(-t^{p-1}+1)^q$ について考えましょう。今は$p$の倍数かどうかにだけ関心があるので、$(t^{p-1}+1)^q$ を考えても同じです。ここで、次のような事実が実験によって分かります:
-  \begin{center}
-   非負整数$a$ の $p$進表記を$a = (d_{e-1}d_{e-2}\cdots d_1d_0)_p$とすると、$(x+1)^a \bmod p$の0でない係数は、ちょうど$(d_{e-1} + 1) \times (d_{e-2} + 1) \times \cdots \times (d_0 + 1)$個ある。
-  \end{center}
-  これに$x = t^{p-1}$を代入すると、$q = (d_{e-1}d_{e-2}\cdots d_1d_0)_p$として、
-  $(-t^{p-1}+1)^q \bmod p$ の0でない係数は$(d_{e-1} + 1) \times (d_{e-2} + 1) \times \cdots \times (d_0 + 1)$個あって、しかもそれぞれの次数は$p-1$次以上離れていることが分かります。$p$進表記を計算する方法は色々ありますが、$n$の桁数が小さいので、$O((\log n)^2)$時間かけて愚直に多倍長整数演算をすれば良いでしょう。
-
-  次に$P(r)$ですが、$P(r)$は$r$次なので、$r < p - 1$ならば$(-t^{p-1}+1)^q$と干渉しないことが分かります。よって答えは$(d_{e-1} + 1) \times (d_{e-2} + 1) \times \cdots \times (d_0 + 1) \times (P(r)\bmod p\mbox{の0でない係数})$であることが分かります。
-  $r = p - 1$の時は、$P(r) \equiv P(p) \pmod p$ より、$n = (q + 1)p$の時と同じ答えになることが分かります。
-
-  以上から$O(p(\log p)^2 + (\log n)^2)$時間の解法が得られました。以下にソースコードを載せます。\url{https://www.codechef.com/viewsolution/17544576} です。
-  \lstinputlisting[caption=FEB18-LUCASTH.cpp,label=FEB18-LUCASTH.cpp]{FEB18-LUCASTH.cpp}
  \section{平方剰余の相互法則\level{4}}
   \subsection{ルジャンドル記号}
   \label{subsec:legendre-symbol}
@@ -425,6 +365,72 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
  http://pekempey.hatenablog.com/entry/2017/02/03/220150
 
  Cipolla のアルゴリズム
+ \section{多項式を使うテク\level{4}}
+ \label{sec:technique-using-polynomials}
+  \subsection{FFT}
+  TODO説明
+  \subsection{フェルマーの小定理}
+  \begin{theorem}
+   \label{thm:polynomial-fermat}
+   素数$p$に対して、以下の等式が成り立つ:
+   \begin{displaymath}
+    (x+1) \times (x+2) \times \cdots \times (x + (p - 1)) \equiv x^{p-1} - 1 \pmod p
+   \end{displaymath}
+  \end{theorem}
+  \begin{proof}
+  まず、$(x+k)$同士は互いに素です。フェルマーの小定理から、$1 \le k \le p - 1$なる各$k$について、$x + k | x^{p-1} - 1$が成り立ちます(整除は$\finiteField{p}[x]$の上のもの)。以上より、$(x+1) \times (x+2) \times \cdots \times (x + (p - 1)) | x^{p-1}-1$です。この整除関係の左辺も右辺も$(p-1)$次なので、両者は定数倍の違いしかありません。$x^{p-1}$の係数を比べることで、その定数倍は1倍である、つまり両者が等しいことがわかります。
+  \end{proof}
+  注意として、$p$が素数でない場合にこれを拡張しようとしても、失敗します。例えば$p=8$の時、$(x+1)(x+3)(x+5)(x+7) \equiv x^4 + 6x^2 + 1 \not \equiv x^{\varphi(8)}-1 \pmod 8$です。これは$\Z/p\Z$が体にならず、$(\Z/p\Z)[x]$において (0以外の) 0次多項式が必ずしも可逆元ではないことに由来します。
+
+  この事実を応用して解ける問題を紹介します。以下の問題を考えましょう。
+  \begin{itembox}[l]{問題}
+   正の整数$n$と素数$p$が与えられる。$[n] := \{1,\ldots, n\}$ として、整数$k$に対して$f(n, k)$ を以下で定める:
+   \begin{displaymath}
+    f(n, k) := \sum_{S \subseteq [n], |S| = k} \prod_{x \in S} x
+   \end{displaymath}
+   このとき、$p \not \mid f(n, k)$ となるような$0 \le k \le n$ の個数を、${} \bmod 10^9+7$ で求めよ。(テストケースは$T$ケース与えられる。)
+
+   制約: $1 \le T \le 4, 2 \le p \le 100000$, $p$は素数
+   \begin{itemize}
+    \item 部分点(10/100点): $n \le 5000$
+    \item 部分点(50/100点): $n \le 100000$
+    \item 満点(100点): $n < 10^{501}$
+   \end{itemize}
+
+   (出典: CodeChef February Challenge 2018 (FEB18) >> Lucas Theorem (LUCASTH))
+  \end{itembox}
+  簡単な式変形、DP、あるいは実験などで、
+  \begin{displaymath}
+   f(n, k) = ((t + 1) \times (2t + 1) \times \cdots \times (nt + 1) \mbox{の$t^k$の係数})
+  \end{displaymath}
+  であることがわかります。
+  $P(n) := (t + 1) \times (2t + 1) \times \cdots \times (nt + 1)$と置きましょう。
+  $P(n)$ の係数を愚直に計算することで、$O(n^2)$解法が得られます (10/100点)。
+
+  これを高速化することを考えましょう。多項式の乗算を高速化したいので、FFTを使うことが思いつきます。分割統治で計算すれば、$O(n (\log n)^2)$解法が得られます (50/100点)。
+
+  満点解法について考えましょう。先ほど紹介したフェルマーの小定理を少し修正することで、以下が分かります:
+  \begin{displaymath}
+   P(p - 1) = (t + 1) \times (2t + 1) \times \cdots \times ((p - 1)t + 1)
+   \equiv -t^{p-1} + 1 \pmod p
+  \end{displaymath}
+  $(kt + 1) \bmod p$ は周期$p$なので、$P(pk) \equiv P(p)^k = (-t^{p-1}+1)^k \pmod p$
+  が分かります。
+
+  よって、$n = qp + r$ ($0 \le r < p$) としたとき、$P(n) \equiv P(qp)P(r) \equiv (-t^{p-1}+1)^qP(r) \pmod p$が計算できればよいです。
+
+  $(-t^{p-1}+1)^q$ について考えましょう。今は$p$の倍数かどうかにだけ関心があるので、$(t^{p-1}+1)^q$ を考えても同じです。ここで、次のような事実が実験によって分かります:
+  \begin{center}
+   非負整数$a$ の $p$進表記を$a = (d_{e-1}d_{e-2}\cdots d_1d_0)_p$とすると、$(x+1)^a \bmod p$の0でない係数は、ちょうど$(d_{e-1} + 1) \times (d_{e-2} + 1) \times \cdots \times (d_0 + 1)$個ある。
+  \end{center}
+  これに$x = t^{p-1}$を代入すると、$q = (d_{e-1}d_{e-2}\cdots d_1d_0)_p$として、
+  $(-t^{p-1}+1)^q \bmod p$ の0でない係数は$(d_{e-1} + 1) \times (d_{e-2} + 1) \times \cdots \times (d_0 + 1)$個あって、しかもそれぞれの次数は$p-1$次以上離れていることが分かります。$p$進表記を計算する方法は色々ありますが、$n$の桁数が小さいので、$O((\log n)^2)$時間かけて愚直に多倍長整数演算をすれば良いでしょう。
+
+  次に$P(r)$ですが、$P(r)$は$r$次なので、$r < p - 1$ならば$(-t^{p-1}+1)^q$と干渉しないことが分かります。よって答えは$(d_{e-1} + 1) \times (d_{e-2} + 1) \times \cdots \times (d_0 + 1) \times (P(r)\bmod p\mbox{の0でない係数})$であることが分かります。
+  $r = p - 1$の時は、$P(r) \equiv P(p) \pmod p$ より、$n = (q + 1)p$の時と同じ答えになることが分かります。
+
+  以上から$O(p(\log p)^2 + (\log n)^2)$時間の解法が得られました。以下にソースコードを載せます。\url{https://www.codechef.com/viewsolution/17544576} です。
+  \lstinputlisting[caption=FEB18-LUCASTH.cpp,label=FEB18-LUCASTH.cpp]{FEB18-LUCASTH.cpp}
  \section{ペル方程式\level{4}}
  \label{sec:pells-equation}
  \begin{itembox}{問題}
