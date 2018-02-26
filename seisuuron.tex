@@ -38,7 +38,7 @@
   例として、拡張ユークリッドの互除法の実装を与えます。
   ここで、各再帰呼び出しの\verb+return+ 直前に$ax+by=\gcd(a,b)$ が成り立っていることに注意してください。
   \lstinputlisting[caption=extgcd.cpp,label=extgcd]{./extgcd.cpp}
- \section{mod $p$上の計算}
+ \section{mod $p$上の計算 (モジュラー演算)}
  \label{sec:mod-p-arithmetic}
   \subsection{基本: 整数の加減乗除\level{1}}
   計算結果が大きすぎるため、${} \bmod (10^9+7)$で出力せよ、という問題が結構あります。
@@ -77,7 +77,7 @@
  \label{sec:exponentiation-by-squaring}
  二分累乗法とよばれる基本テクニックがあります。
 
- ある種の「掛け算」$x \cdot y$ が定義されているような代数的構造 (\emph{モノイド}と呼びます) の上で、$x$ の $e$乗 $x^e = x \cdot \cdots \cdot x$は$2\log_2 e$回以内の掛け算で計算できます。この方法を\emph{二分累乗法}\index{にぶんるいじょうほう@二分累乗法} (\emph{exponentiation by squaring}) と呼びます。
+ 結合法則を満たす「掛け算」$x \cdot y$ が定義されているような代数的構造 (\emph{モノイド}\index{ものいど@モノイド}と呼びます) の上で、$x$ の $e$乗 $x^e = x \cdot \cdots \cdot x$は$2\log_2 e$回以内の掛け算で計算できます。この方法を\emph{二分累乗法}\index{にぶんるいじょうほう@二分累乗法} (\emph{exponentiation by squaring}) と呼びます。
 
  二分累乗法には2種類の方法があります。一つ目は、$e$の2進表記の小さい桁の方から計算をする方法で、もう一つは$e$ の2進表記の大きい桁の方から計算をする方法です。整数のmodつき掛け算を例にして、両方のアルゴリズムを紹介します。
 
@@ -88,7 +88,7 @@
  次に二つ目を紹介します。$e$ の上の桁から見ていくアルゴリズムです。
  ループの各イテレーション終了時に$prod^{2^i} * x^{e \% 2^i} = (answer) = x^e$ が成り立つことに注意しましょう。
  \lstinputlisting[caption=powmod-2.cpp,label=powmod-2.cpp]{powmod-2.cpp}
-  \subsection{群的構造を見つけて二分累乗する\level{2}}
+  \subsection{モノイド的構造を見つけて二分累乗する\level{2}}
   \begin{itembox}[l]{問題}
    $\cos \theta = \frac{d}{l}$であるような$\theta$に対して、$\cos t\theta$は有理数であることが証明できる。$l\cos t\theta = \frac{p}{q}$であるとき、$pq^{-1} \bmod (10^9+7)$を求めよ。
    \begin{itemize}
@@ -99,7 +99,7 @@
   \end{itembox}
   部分点解法は、2倍角の公式$\cos 2\theta = 2\cos^2\theta - 1$を利用して、$p$回の計算を行うことでできます。
 
-  問題は満点解法の方で、愚直にやると$t$倍角の公式が必要になってきて、不可能とは言わないまでも面倒です。そこで、ド・モアブルの公式 (de Moivre's formula)
+  問題は満点解法の方で、愚直にやると$t$倍角の公式が必要になってきて、実質的に不可能です。そこで、ド・モアブルの公式 (de Moivre's formula)
   \begin{displaymath}
    \cos t\theta + i\sin t\theta = (\cos\theta + i\sin\theta)^t
   \end{displaymath}
@@ -172,12 +172,12 @@
    \subsubsection{加法群\level{4}}
    $\Z/p\Z$の話 TODO
    素数$p$ に対して、$p$で割った余り全体の集合を$\Z/p\Z$と書きます。$\Z/p\Z$ は、加法を演算として、群の構造を持ちます。
+   この群は、真の部分群が存在しない群です。
    \subsubsection{乗法群\level{4}}
    $\Z/p\Z$ のうち、0以外の元には乗法の逆元が存在することは、\ref{subsec:inverse-element}で確かめました。これらの元からなる集合を$(\Z/p\Z)^*$ と表記し、$\Z/p\Z$の\emph{乗法群} \index{じょうほうぐん@乗法群} (\emph{multiplicative group}) と呼びます。
 
-   平方剰余全体は$(\Z/p\Z)^*$の部分群 TODO
    平方剰余全体の集合をここでは$H$と書くことにします。$H$は $(\Z/p\Z)^*$ の部分群です。
-   \ref{subsubsec:quadratic-residue} でみたように、平方非剰余$z$を適当にとると、$zH$と$H$は共通部分を持たず、また$H \cup zH = (\Z/p\Z)^*$ です。
+   \ref{subsubsec:quadratic-residue} でみたように、平方非剰余$z \not \in H$を適当にとると、$zH := \{zh \mid h \in H\}$と$H$は共通部分を持たず、また$H \cup zH = (\Z/p\Z)^*$ です。
 \subsection{mod\_sqrt, Tonelli-Shanks のアルゴリズム\level{3}}
 \subsubsection{問題}
 ある $x$ について $a \equiv x^2 \pmod p$ が成り立つ $a$ が与えられる。この時、$x$ を求めよ。
@@ -359,6 +359,11 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
    \finiteField{M}(\sqrt{3}) \cong \finiteField{M^2}
   \end{displaymath}
   ここで、$\Frob(2+\sqrt{3}) = (2+\sqrt{3})^M \in \finiteField{M^2}$がどのような元になるかを考えてみましょう。$2+\sqrt{3}$の共役は自分自身と$2-\sqrt{3}$のみなので、$\Frob(2+\sqrt{3})=2-\sqrt{3}$でなければなりません。これから、$(2+\sqrt{3})^{M+1}=(2-\sqrt{3})(2+\sqrt{3})=1$であることが分かります。
+
+  よって、$M \equiv 1, 11 \pmod{12}$なら周期$M-1$、それ以外なら周期$M + 1$だと思って実装することができます。注意すべきなのは$M = 2,3$のケースで、今回は周期が$M \pm 1$のどちらだと思っても偶然うまく動作しますが、うまく行かない問題もあるので、注意が必要です。
+
+  この問題は筆者が writer でした。ソースコードを以下に載せます。\url{https://yukicoder.me/submissions/239504} からアクセスすることもできます。 (今回限り Java です。)
+  \lstinputlisting[caption=yukicoder-613.java,label=yukicoder-613.java,language=Java]{yukicoder-613.java}
  \section{mod\_sqrt その2\level{3}}
  Karp (1991)~\cite{Karp1991}
  \section{mod\_sqrt その3\level{4}}

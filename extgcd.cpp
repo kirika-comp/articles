@@ -13,7 +13,6 @@ lint ext_gcd(lint a,lint b,lint&x,lint&y){
   return g;
 }
 
-
 int main(){
   lint a,b;
   cin>>a>>b;
@@ -23,5 +22,4 @@ int main(){
       <<b<<" "<<x<<" "<<y
       <<endl;
   cout<<g<<endl;
-				    
 }
