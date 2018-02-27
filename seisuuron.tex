@@ -443,7 +443,7 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
 
   ここで切り出されなかった部分のうち、$a^2$平方メートルの50\%を越える部分の面積
   (つまり$(a^2/2-nb^2)$平方メートル)を最小化したい。
-  $n$が与えられるので、最小値を与える正の整数$a,b$を与えよ。
+  $n$が与えられるので、最小値を与える最小の正の整数$a,b$を与えよ。
 
   制約: $1 \le n \le 10000$
 
@@ -456,12 +456,35 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
  ここで、以下の事実が知られています。
  \begin{theorem}
   \label{thm:pells-equation-has-solutions}
-  $n$が平方数でない正の整数のとき、方程式$x^2 - ny^2=1$は、正の整数解$(x,y)$を必ず持つ。
+  $d$ が平方数でない正の整数のとき、方程式$x^2 - dy^2=1$は、正の整数解$(x,y)$を必ず持つ。
  \end{theorem}
  このような方程式を\emph{ペル方程式}\index{ぺるほうていしき@ペル方程式} (\emph{Pell's equation}) と呼び、
- このような$(x,y)$のうち、$x$が最小のものを\emph{基本解}\index{きほんかい@基本解} (\emph{fundamental solution}) と呼びます。この問題では、基本解が計算できれば良いでしょう。
+ このような$(x,y)$のうち、$x$が最小のものを\emph{基本解}\index{きほんかい@基本解} (\emph{fundamental solution}) と呼びます。この問題では、基本解が計算できれば良いです。
 
- ペル方程式の基本解を計算するアルゴリズムを説明します。連分数を使う、以下のアルゴリズムが広く知られています。TODO
+ ペル方程式の基本解を計算するアルゴリズムを説明します。連分数を使う、以下のアルゴリズムが広く知られています。
+
+ \begin{algorithm}                      
+  \caption{ペル方程式}
+  \label{alg:pells-equation}
+  入力: $d$: 正の整数、平方数でない
+
+  出力: $x, y$: 正の整数, $x^2 - dy^2 = 1$を満たす、$x,y$ はその中で最小
+
+  1. $\alpha_0 = \sqrt{d}$ とする。
+
+  2. $q_i = \floor{\alpha_i}, \alpha_{i+1} = 1/(\alpha_i - q_i)$ として無限数列を作る。この無限数列は、必ず循環する。
+
+  3. 上で作った数列は、循環節が$q_1$から開始する。つまり、$(q_i) \colon q_0, q_1,\ldots, q_{m-1}, q_m, q_{1}, \ldots$ となる。このような最小の$m$をとり、
+  \begin{displaymath}
+   b = [q_0; q_1, \ldots, q_{m-1}] = q_0 + \frac{1}{q_1 + \frac{1}{\cdots + \frac{1}{q_{m-1}}}}
+  \end{displaymath}
+  とする。
+
+  4. $b = x/y$ ($x$と$y$は互いに素な正の整数) としたとき、$x, y$を出力する。
+ \end{algorithm}
+ TODO具体例
+
+ 実装するときの注意として、$\alpha_i$の表現方法があります。実は、$\alpha_i$ は $\alpha_i = (x +\sqrt{d}) / z$ ($x, z$ は整数) という形で表せることが知られているので、この$x, z$ を保持すれば良いです。
 
  ソースコードを載せます。このソースコードは \url{http://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=2723600} で公開されています。
  \lstinputlisting[caption=aoj-2116.cpp,label=aoj-2116.cpp]{aoj-2116.cpp}
