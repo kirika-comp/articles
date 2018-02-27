@@ -152,7 +152,9 @@
    f(y,z+1)=1+y+\cdots+y^{z}=1+y(1+y+\cdots+y^{z-1})=1+yf(y,z)
   \end{displaymath}
   これによって、$z$の偶奇に応じて場合分けしながら再帰を行うことで、$f(y,z)$の値を除算なしで計算することができます。
-  ソースコードTODO
+
+  ソースコードは以下のようになります。\url{https://arc020.contest.atcoder.jp/submissions/2141049} です。
+  \lstinputlisting[caption=ARC020C.cpp,label=ARC020C.cpp]{ARC020C.cpp}
  \section{${}\bmod p$ のアルゴリズム}
   \subsection{基礎知識}
   \label{subsec:group-preliminaries}
@@ -438,7 +440,7 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
   \lstinputlisting[caption=FEB18-LUCASTH.cpp,label=FEB18-LUCASTH.cpp]{FEB18-LUCASTH.cpp}
  \section{ペル方程式\level{4}}
  \label{sec:pells-equation}
- \begin{itembox}{問題}
+ \begin{itembox}[l]{問題}
   一辺$a$メートルの正方形がある。この正方形から、一辺$b$メートルの正方形を$n$個切り出すことを考える。ただし、切り出されなかった部分の面積は、元の正方形の面積の50\%以上でなければならない。つまり、$a^2-nb^2 \ge a^2/2$が必要である。
 
   ここで切り出されなかった部分のうち、$a^2$平方メートルの50\%を越える部分の面積
