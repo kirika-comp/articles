@@ -488,6 +488,11 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
 
  ソースコードを載せます。このソースコードは \url{http://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=2723600} で公開されています。
  \lstinputlisting[caption=aoj-2116.cpp,label=aoj-2116.cpp]{aoj-2116.cpp}
+ \begin{itembox}[l]{COLUMN}
+  定理\ref{thm:pells-equation-has-solutions} は、ディリクレの単数定理 (Dirichlet's unit theorem)~\cite{Stevenhagen2008} の特殊な場合で、$K = \Q(\sqrt{d})$ (実2次体) のオーダー $\Z[\sqrt{d}]$ の単数たちのなす乗法群 $U$ のランクが1である (つまり、$U \cong (\mbox{有限群}) \times \Z$ と表すことができる) ことを言っています。
+  $\Z$ 成分の生成元のことを\emph{基本単数}\index{きほんたんすう@基本単数} (\emph{fundamental unit}) と呼びますが、上のアルゴリズムで求めた$(x, y)$ が基本単数$x + y\sqrt{d}$ を与えます。
+  興味のある人は調べてみましょう。
+ \end{itembox}
  \section{単項イデアル整域\level{5}}
  \label{sec:principal-ideal-domain}
  \begin{definition}
