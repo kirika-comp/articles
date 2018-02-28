@@ -367,7 +367,22 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
   この問題は筆者が writer でした。ソースコードを以下に載せます。\url{https://yukicoder.me/submissions/239504} からアクセスすることもできます。 (今回限り Java です。)
   \lstinputlisting[caption=yukicoder-613.java,label=yukicoder-613.java,language=Java]{yukicoder-613.java}
  \section{mod\_sqrt その2\level{3}}
- Karp (1991)~\cite{Karp1991}
+ \label{sec:karp-mod-sqrt}
+ \begin{theorem}
+  $p$ を奇素数とする。
+  ${} \bmod p$の0以外の平方剰余を$a_1, \ldots, a_h$ とする。
+  このとき
+  \begin{displaymath}
+   (x - a_1) \times (x - a_2) \times \cdots \times (x - a_h)
+   \equiv x^{\frac{p-1}{2}}-1 \pmod p
+  \end{displaymath}
+  が成り立つ。
+ \end{theorem}
+ \begin{proof}
+  定理\ref{thm:polynomial-fermat} と同じ論法が使えます。
+ \end{proof}
+ これを利用したアルゴリズムを紹介します。 TODO Karp (1991)~\cite{Karp1991}
+
  \section{mod\_sqrt その3\level{4}}
  http://pekempey.hatenablog.com/entry/2017/02/03/220150
 
