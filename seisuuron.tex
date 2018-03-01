@@ -309,6 +309,7 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
     \end{displaymath}
   \end{proposition}
   \begin{proposition}
+   \label{prop:legendre-symbol-is-multiplicative}
    ルジャンドル記号は乗法的である。つまり、
    \begin{displaymath}
     \legendre{a}{p} \legendre{b}{p} = \legendre{ab}{p}
@@ -436,6 +437,14 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
  \begin{proof}
   むずかしいノエ TODO
  \end{proof}
+ また、このアルゴリズムの正当性については、以下のような観察により証明できます。
+
+ まず、$a$ は平方剰余なので、$r^2 \equiv a \pmod p$ となるような$r$が存在します。
+ このような$r$ について、$(x-c)^2-a = (x - c -r) (x - c + r)$ です。
+ 先ほどみたように$\legendre{c^2-a}{p} = -1$ で、命題\ref{prop:legendre-symbol-is-multiplicative} より$\legendre{c + r}{p}\legendre{c - r}{p} = -1$ です。
+ そのため、$\legendre{c + r}{p}$ か $\legendre{c - r}{p}$ のどちらかは1でどちらかは$-1$となります。$x^{\frac{p-1}{2}}-1$ は全ての平方剰余$a$に対する$x-a$の積なので、最大公約数をとると平方剰余の方だけが残ります。
+
+ このアルゴリズムの計算量についてですが、$r(x) = (x^{\frac{p-1}{2}} - 1) \bmod ((x-c)^2 - a)$ と置くと、$r(x)$ が求めたい最大公約数であることは明らかです。これは行列累乗などを用いることで $O(\log p)$ で計算できます。よって、このアルゴリズムの計算量は、$O(\log p)$です。
  \section{mod\_sqrt その3\level{4}}
  Cipolla のアルゴリズムと呼ばれるものを紹介します。\url{http://pekempey.hatenablog.com/entry/2017/02/03/220150} でも紹介されています。
 
@@ -463,8 +472,9 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
   $(x+y\theta)^2 = (x^2+(c^2-a)y^2) + 2xy\theta$ であり、$1$ と $\theta$ が$\finiteField{p}$ 上線形独立であることから、$2xy = 0$ であることがわかります。$p$は奇素数なので、$x=0$ あるいは $y=0$ が成り立ちます。ここで$x = 0$, $y \neq 0$ だとしましょう。このとき$a = (y\theta)^2 = (c^2-a)y^2$ ですが、$c^2-a$ が平方非剰余となるように$c$を選んだので、矛盾します。
  \end{proof}
  \begin{remark}
-  あるいは、これは単に、$\finiteField{p}(\theta)$が体であるため、$x^2-a = 0$は$\finiteField{p}(\theta)$上に根を最大2個しか持たず、$a$が平方剰余であるためそれらは$\finiteField{p}$の元であるような2個だけである、ということもできます。
+  あるいは、これは単に、$\finiteField{p}(\theta)$が体であるため、方程式 $x^2-a = 0$は$\finiteField{p}(\theta)$上に根を最大2個しか持たず、$a$が平方剰余であるためそれらは$\finiteField{p}$の元であるような2個だけである、ということもできます。
  \end{remark}
+ このアルゴリズムの計算量は、$O(\log p)$ です。
  \section{多項式を使うテク\level{4}}
  \label{sec:technique-using-polynomials}
   \subsection{高速フーリエ変換 (FFT)}
