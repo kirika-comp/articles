@@ -412,7 +412,7 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
   2. 多項式 ($\finiteField{p}[x]$ の元) の最大公約数 $\gcd(x^{\frac{p-1}{2}} - 1, (x-c)^2 - a)$ を計算する。答えは1次式 $ux + v$ となる。$a$ の平方根は$\pm (c - u^{-1}v)$ なので、$+$ か $-$ のうちどちらかを出力する。
  \end{algorithm}
 
- 1.での選択が定数時間で成功することは、以下の定理で証明できます。
+ 1.での選択にかかる時間の期待値が定数であることは、以下の定理で証明できます。
  \begin{theorem}[{\cite[Theorem~3.2]{Karp1991}}]
   \label{thm:abundance-of-witnesses-in-karp1991}
   $a \in (\Z/p\Z)^*$ を平方剰余とする。このとき、$c \in (\Z/p\Z)^*$ がランダムに選ばれるならば、確率$(p-3)/2(p-1)$以上で$\legendre{c^2-a}{p} = -1$ が成立する。
@@ -424,6 +424,27 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
  http://pekempey.hatenablog.com/entry/2017/02/03/220150
 
  Cipolla のアルゴリズム
+
+ \begin{algorithm}
+  \caption{\cite[Algorithm~3.1]{Karp1991}}
+  \label{alg:cipolla-mod-sqrt}
+  入力: $p$: 奇素数, $a$: $1 \le a < p$ を満たす平方剰余
+
+  出力: $r^2 = a$ を満たす$r$
+
+  1. $c \in (\Z/p\Z)^*$ をランダムに選び、$\legendre{c^2-a}{p} = -1$となるようにする。
+
+  2. $\theta = \sqrt{c^2-a}$ として体拡大$\finiteField{p}(\theta)$ を考える。
+  $(c + \theta)^{\frac{p+1}{2}}$ は $\finiteField{p}$ の元であり、これが答え (平方根の一つ) を与える。
+ \end{algorithm}
+
+ \begin{proposition}
+  上のアルゴリズムは正しい解を与える。
+ \end{proposition}
+ \begin{proof}
+  たぷ TODO
+ \end{proof}
+
  \section{多項式を使うテク\level{4}}
  \label{sec:technique-using-polynomials}
   \subsection{FFT}
