@@ -462,8 +462,23 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
 
  \section{多項式を使うテク\level{4}}
  \label{sec:technique-using-polynomials}
-  \subsection{FFT}
-  TODO説明
+  \subsection{高速フーリエ変換 (FFT)}
+  \label{subsec:fft}
+  数列$a_0, a_1, \ldots, a_{n-1}$ と $b_0, b_1, \ldots, b_{n-1}$に対して、$a$ と $b$ の\emph{畳み込み}\index{たたみこみ@畳み込み} (\emph{convolution}) とは、数列$c_i := \sum_{j=0}^{i} a_jb_{i-j}$ のことです。多項式の積の係数も、畳み込みだと思うことができます。
+
+  \emph{高速フーリエ変換} (\emph{fast Fourier transform}, FFT) という手法を使うことで、$d$項の数列の畳み込みの計算量が$O(d^2)$から$O(d \log d)$になります。よって、$d$次多項式の乗算も、同じ計算量でできます。
+  詳しくは、\url{https://atc001.contest.atcoder.jp/tasks/fft_c} を参考にしてください。
+
+  doubleで計算を行うと誤差が出るので、次数$d$, 係数の最大値$u$として、$du^2 \le 10^{15}$くらいでないと整数演算のためには使えません。
+  理由は、畳み込みの結果の係数は最大$du^2$程度で、整数として扱うため double の精度の関係で $du^2 < 2^{53}$でないといけないからです。$d \le 10^5, u\le 10^5$くらいでギリギリでしょう。
+  実装は省略するので、先に挙げたサイトを参考にするなどしてください。
+
+  \begin{itembox}[l]{COLUMN}
+   NTT (number theoretic transformation) (FMT (fast modulo transformation) ともいう) という手法があります。これは、doubleの代わりに Proth prime $p = k \times 2^n + 1$ をmodとした環の上でFFTをするという手法です。
+   整数演算なので誤差が出ないのが嬉しいです。(mod 演算のせいで定数倍重めですが…。)(ちゃんと調べていないのでわかりませんが TODO)
+   詳しくは\url{http://math314.hateblo.jp/entry/2015/05/07/014908} を見てください。
+   原始根とか使います。実装重いです。実装したくないです。
+  \end{itembox}
   \subsection{フェルマーの小定理}
   \begin{theorem}
    \label{thm:polynomial-fermat}
@@ -525,7 +540,12 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
   $r = p - 1$の時は、$P(r) \equiv P(p) \pmod p$ より、$n = (q + 1)p$の時と同じ答えになることが分かります。
 
   以上から$O(p(\log p)^2 + (\log n)^2)$時間の解法が得られました。以下にソースコードを載せます。\url{https://www.codechef.com/viewsolution/17544576} です。
+  実装には NTT を用いました。double での計算でもおそらく正解できますが、検証していません。
   \lstinputlisting[caption=FEB18-LUCASTH.cpp,label=FEB18-LUCASTH.cpp]{FEB18-LUCASTH.cpp}
+  \subsection{原始根}
+  \label{subsec:convolution-with-primitive-roots}
+  \url{http://techtipshoge.blogspot.jp/2012/04/facebook-hacker-cup-2011-round2-scott.html}
+  まだ理解していないちょく
  \section{ペル方程式\level{4}}
  \label{sec:pells-equation}
  \begin{itembox}[l]{問題}
