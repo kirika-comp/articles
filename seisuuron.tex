@@ -370,10 +370,10 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
  \label{sec:karp-mod-sqrt}
  \begin{theorem}
   $p$ を奇素数とする。
-  ${} \bmod p$の0以外の平方剰余を$a_1, \ldots, a_h$ とする。
+  ${} \bmod p$の0以外の平方剰余を$a_1, \ldots, a_{\frac{p-1}{2}}$ とする。
   このとき
   \begin{displaymath}
-   (x - a_1) \times (x - a_2) \times \cdots \times (x - a_h)
+   (x - a_1) \times (x - a_2) \times \cdots \times (x - a_{\frac{p-1}{2}})
    \equiv x^{\frac{p-1}{2}}-1 \pmod p
   \end{displaymath}
   が成り立つ。
@@ -383,6 +383,10 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
  \end{proof}
  これを利用したアルゴリズムを紹介します。 TODO Karp (1991)~\cite{Karp1991}
 
+ 以下の定理がメインです。
+ \begin{theorem}[{\cite[Theorem~3.2]{Karp1991}}]
+  $a \in (\Z/p\Z)^*$ を平方剰余とする。このとき、$c \in (\Z/p\Z)^*$ がランダムに選ばれるならば、確率1/2以上で$\legendre{c^2-a}{p} = -1$ が成立する。
+ \end{theorem}
  \section{mod\_sqrt その3\level{4}}
  http://pekempey.hatenablog.com/entry/2017/02/03/220150
 
