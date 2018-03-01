@@ -398,12 +398,28 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
  \begin{proof}
   定理\ref{thm:polynomial-fermat} と同じ論法が使えます。
  \end{proof}
- これを利用したアルゴリズムを紹介します。 TODO Karp (1991)~\cite{Karp1991}
+ これを利用したアルゴリズムを紹介します。このアルゴリズムは Lehmer によるものです。
 
- 以下の定理がメインです。
+ \begin{algorithm}
+  \caption{\cite[Algorithm~3.1]{Karp1991}}
+  \label{alg:lehmer-mod-sqrt}
+  入力: $p$: 奇素数, $a$: $1 \le a < p$ を満たす平方剰余
+
+  出力: $r^2 = a$ を満たす$r$
+
+  1. $c \in (\Z/p\Z)^*$ をランダムに選び、$\legendre{c^2-a}{p} = -1$となるようにする。
+
+  2. 多項式 ($\finiteField{p}[x]$ の元) の最大公約数 $\gcd(x^{\frac{p-1}{2}} - 1, (x-c)^2 - a)$ を計算する。答えは1次式 $ux + v$ となる。$a$ の平方根は$\pm (c - u^{-1}v)$ なので、$+$ か $-$ のうちどちらかを出力する。
+ \end{algorithm}
+
+ 1.での選択が定数時間で成功することは、以下の定理で証明できます。
  \begin{theorem}[{\cite[Theorem~3.2]{Karp1991}}]
-  $a \in (\Z/p\Z)^*$ を平方剰余とする。このとき、$c \in (\Z/p\Z)^*$ がランダムに選ばれるならば、確率1/2以上で$\legendre{c^2-a}{p} = -1$ が成立する。
+  \label{thm:abundance-of-witnesses-in-karp1991}
+  $a \in (\Z/p\Z)^*$ を平方剰余とする。このとき、$c \in (\Z/p\Z)^*$ がランダムに選ばれるならば、確率$(p-3)/2(p-1)$以上で$\legendre{c^2-a}{p} = -1$ が成立する。
  \end{theorem}
+ \begin{proof}
+  むずかしいノエ TODO
+ \end{proof}
  \section{mod\_sqrt その3\level{4}}
  http://pekempey.hatenablog.com/entry/2017/02/03/220150
 
