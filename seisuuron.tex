@@ -161,6 +161,17 @@
 
   ソースコードは以下のようになります。\url{https://arc020.contest.atcoder.jp/submissions/2141049} です。
   \lstinputlisting[caption=ARC020C.cpp,label=ARC020C.cpp]{ARC020C.cpp}
+ \section{Abundance で殴る~\level{2}}
+  \subsection{素数の abundance で殴る}
+  \label{subsec:abundance-of-prime-numbers}
+  \begin{itembox}[l]{問題}
+   正の整数 $p,y$ が与えられる。2以上$p$以下のどのような整数$i$についても$z = ki$ ($k \ge 2$) と表されないような、$y$以下の最大の整数$z$を求めよ。
+
+   制約: $2 \le p \le y \le 10^9$
+
+   (出典: Codeforces Round \#467 (Div. 2) B. Vile Grasshoppers)
+  \end{itembox}
+  まず、$z$が素数なら問題の条件は確実に満たされます。$y$付近の素数の密度は$\Theta(1/\log y)$ なので、$O(\log y)$個程度調べれば、一つは素数が見つかる計算です。与えられた$z$が問題の条件を満たすかどうかの判定は$O(\min(p, \sqrt{y}))$でできるので、$y$から大きい順に調べていくことで、時間計算量$O(\min(p, \sqrt{y})\log y)$で解くことができます。
  \section{${}\bmod p$ のアルゴリズム}
   \subsection{基礎知識}
   \label{subsec:group-preliminaries}
