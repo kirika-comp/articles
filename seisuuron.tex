@@ -197,7 +197,8 @@
 
    平方剰余全体の集合をここでは$H$と書くことにします。$H$は $(\Z/p\Z)^*$ の部分群です。
    \ref{subsubsec:quadratic-residue} でみたように、平方非剰余$z \not \in H$を適当にとると、$zH := \{zh \mid h \in H\}$と$H$は共通部分を持たず、また$H \cup zH = (\Z/p\Z)^*$ です。
-\subsection{mod\_sqrt, Tonelli-Shanks のアルゴリズム\level{3}}
+  \subsection{mod\_sqrt, Tonelli-Shanks のアルゴリズム\level{3}}
+  \label{subsec:tonelli-shanks}
 \subsubsection{問題}
 ある $x$ について $a \equiv x^2 \pmod p$ が成り立つ $a$ が与えられる。この時、$x$ を求めよ。
 
@@ -208,7 +209,7 @@ $p$ が${}\bmod 4$ で3の時は簡単です。$x \equiv a^{(p+1)/4}$とする�
 
 $p$ が ${}\bmod 4$ で 1の時は結構複雑なことをします。ここではTonelli-Shanksの方法と呼ばれるアルゴリズムを説明します。
 
-\subsubsection{Tonelli-Shanks (トネリ-シャンクス) のアルゴリズム}
+   \subsubsection{Tonelli-Shanks (トネリ-シャンクス) のアルゴリズム}
 Reference: \url{https://en.wikipedia.org/wiki/Tonelli%E2%80%93Shanks_algorithm}
 
 注意: 以下の疑似コードでは代入は全部同時に行います。特に5.で、$t$に代入する値は前の $c$ によって決まります。
@@ -271,6 +272,20 @@ $m := 3, c :\equiv 7^5 = 16807 \equiv 38, t :\equiv 8^5 = 32768 \equiv 9, r \equ
 以上のアルゴリズムで、4.のパートに無駄があります。4.では$c$と$m$しか変更していないので、$t^{2^i}\not \equiv 1 \pmod p$ となる最大の $i$ が見つけられれば、4.の操作をまとめることができます。このアイデアを使うのが、本来の Tonelli-Shanks のアルゴリズムです。
 
 (TODO Wikipedia のTonelli-Shanks の説明)
+
+ 以上を使うと、次の問題が解けます。
+
+ \begin{itembox}[l]{問題}
+  $x \bmod m, (x + d) \bmod m, \ldots, (x +(n - 1)d) \bmod m$ がシャッフルされた状態で与えられる。この時、$x, d$ ($0 \le x < m, 0 \le d < m$ を満たす) を復元せよ。不可能ならば -1 を出力せよ。
+
+  制約: $2 \le m \le 10^9 + 7$、$m$ は素数、$1 \le n \le 10^5$
+
+  (出典: Codeforces Round \#395 (Div. 1) C. Timofey and remoduling)
+ \end{itembox}
+ シャッフルされても平均と分散は変わらないため、これを特徴量とすることができます。
+ 平均は$x + d(n - 1) / 2$, 分散は$(n-1)(n+1)d^2/12$です。($m \neq 2, 3$ならば) ここから$d$が復元でき、$x$も復元できます。最後に復元した$x, d$が妥当か調べれば OK です。
+
+ ソースコード TODO
 
 \begin{itembox}[l]{COLUMN}
  群論的なアプローチをすると、もっと綺麗な見方が得られます。
