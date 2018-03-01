@@ -54,9 +54,15 @@
    \item $r^{p-1} \equiv 1 \pmod p$ (フェルマーの小定理、定理\ref{thm:fermats-little-theorem})を利用して、$r^{p-2} \bmod p$を計算する。
    \item 拡張ユークリッドの互除法を使う。
   \end{enumerate}
-  実装が単純なのは1.ですが、多くの場合で2.の方が高速に動作します。ライブラリを作る場合は、2.の方で作ると良いでしょう。
+  実装が単純なのは1.ですが、多くの場合で2.の方が高速に動作します。そのうえ、2.では$p$が素数であるという条件すら不要です。ライブラリを作る場合は、2.の方で作ると良いでしょう。
 
-  以下に両方の実装を与えます。 実装TODO
+  以下に両方の実装を与えます。
+
+  1.の実装を与えます。$a^{-1} \bmod p$ を返します。
+  \lstinputlisting[caption=invmod-1.cpp,label=invmod-1.cpp]{invmod-1.cpp}
+
+  2.の実装を与えます。$a^{-1} \bmod m$ を返します。
+  \lstinputlisting[caption=invmod-2.cpp,label=invmod-2.cpp]{invmod-2.cpp}
 
   \subsection{基本: 分数の加減乗除\level{2}}
   \label{subsec:operations-on-fractions}
