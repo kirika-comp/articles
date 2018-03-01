@@ -161,8 +161,8 @@
 
   ソースコードは以下のようになります。\url{https://arc020.contest.atcoder.jp/submissions/2141049} です。
   \lstinputlisting[caption=ARC020C.cpp,label=ARC020C.cpp]{ARC020C.cpp}
- \section{Abundance で殴る~\level{2}}
-  \subsection{素数の abundance で殴る}
+ \section{Abundance で殴る\level{2}}
+  \subsection{素数の abundance で殴る\level{2}}
   \label{subsec:abundance-of-prime-numbers}
   \begin{itembox}[l]{問題}
    正の整数 $p,y$ が与えられる。2以上$p$以下のどのような整数$i$についても$z = ki$ ($k \ge 2$) と表されないような、$y$以下の最大の整数$z$を求めよ。
@@ -508,19 +508,37 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
 
   出力: $x, y$: 正の整数, $x^2 - dy^2 = 1$を満たす、$x,y$ はその中で最小
 
-  1. $\alpha_0 = \sqrt{d}$ とする。
+  1. $\alpha_0 := \sqrt{d}$ とする。
 
-  2. $q_i = \floor{\alpha_i}, \alpha_{i+1} = 1/(\alpha_i - q_i)$ として無限数列を作る。この無限数列は、必ず循環する。
+  2. $q_i := \floor{\alpha_i}, \alpha_{i+1} := 1/(\alpha_i - q_i)$ として無限数列を作る。この無限数列は、必ず循環する。
 
   3. 上で作った数列は、循環節が$q_1$から開始する。つまり、$(q_i) \colon q_0, q_1,\ldots, q_{m-1}, q_m, q_{1}, \ldots$ となる。このような最小の$m$をとり、
   \begin{displaymath}
-   b = [q_0; q_1, \ldots, q_{m-1}] = q_0 + \frac{1}{q_1 + \frac{1}{\cdots + \frac{1}{q_{m-1}}}}
+   b := [q_0; q_1, \ldots, q_{m-1}] = q_0 + \frac{1}{q_1 + \frac{1}{\cdots + \frac{1}{q_{m-1}}}}
   \end{displaymath}
   とする。
 
-  4. $b = x/y$ ($x$と$y$は互いに素な正の整数) としたとき、$x, y$を出力する。
+  4. $b = x/y$ ($x$と$y$は互いに素な正の整数) としたとき、
+  $x, y$ は $x^2 -dy^2 = \pm 1$ を満たす。
+  $x^2 - dy^2 = 1$ の場合、$x, y$を出力する。
+  $x^2 - dy^2 = -1$ の場合、$x^2 + dy^2, 2xy$を出力する。
  \end{algorithm}
- TODO具体例
+ 具体例として、$d = 14$ の場合にこのアルゴリズムがどう動くかを見て見ましょう。
+ 数列 $\alpha_i$ と $q_i$ は以下のようになります:
+ \begin{displaymath}
+  \{a_i\}: \sqrt{14},
+  \frac{3+\sqrt{14}}{5}, \frac{2+\sqrt{14}}{2},
+  \frac{2+\sqrt{14}}{5}, 3+\sqrt{14},
+  \frac{3+\sqrt{14}}{5}, \frac{2+\sqrt{14}}{2}, \ldots
+ \end{displaymath}
+ \begin{displaymath}
+  \{q_i\}: 3, 1, 2, 1, 6, 1, 2, \ldots
+ \end{displaymath}
+ 循環節は$q_1$ から$q_4$ までの長さ4の部分列です。$m = 4$ で、
+ \begin{displaymath}
+  b = [3; 1, 2, 1] = 15/4
+ \end{displaymath}
+ が成立します。$15^2 - 14 \times 4^2 = 1$であるため、出力は$15, 4$ となります。
 
  実装するときの注意として、$\alpha_i$の表現方法があります。実は、$\alpha_i$ は $\alpha_i = (x +\sqrt{d}) / z$ ($x, z$ は整数) という形で表せることが知られているので、この$x, z$ を保持すれば良いです。
 
