@@ -266,16 +266,20 @@ $m := 3, c :\equiv 7^5 = 16807 \equiv 38, t :\equiv 8^5 = 32768 \equiv 9, r \equ
  以上を使うと、次の問題が解けます。
 
  \begin{itembox}[l]{問題}
-  $x \bmod m, (x + d) \bmod m, \ldots, (x +(n - 1)d) \bmod m$ がシャッフルされた状態で与えられる。この時、$x, d$ ($0 \le x < m, 0 \le d < m$ を満たす) を復元せよ。不可能ならば -1 を出力せよ。
+  相異なることが保証されている$n$ 個の整数 $a_1, \ldots, a_n$ が与えられる。これを並べ替えて、$x \bmod m, (x + d) \bmod m, \ldots, (x +(n - 1)d) \bmod m$ と表せるかどうか判定せよ。表せる場合、$x, d$ ($0 \le x < m, 0 \le d < m$ を満たす) を復元せよ (複数ある場合はどれでもよい)。表せない場合、 $-1$ を出力せよ。
 
-  制約: $2 \le m \le 10^9 + 7$、$m$ は素数、$1 \le n \le 10^5$
+  制約: $2 \le m \le 10^9 + 7$、$m$ は素数、$1 \le n \le 10^5$, $0 \le a_i < m$
 
   (出典: Codeforces Round \#395 (Div. 1) C. Timofey and remoduling)
  \end{itembox}
- シャッフルされても平均と分散は変わらないため、これを特徴量とすることができます。
- 平均は$x + d(n - 1) / 2$, 分散は$(n-1)(n+1)d^2/12$です。($m \neq 2, 3$ならば) ここから$d$が復元でき、$x$も復元できます。最後に復元した$x, d$が妥当か調べれば OK です。
+ 並べ替えても平均と分散は変わらないため、これを特徴量とすることができます。
+ 平均は$x + d(n - 1) / 2$, 分散は$(n-1)(n+1)d^2/12$です。($n \neq 1, m-1,m$, $m \neq 2, 3$ならば) ここから$d$が復元でき、$x$も復元できます。最後に復元した$x, d$が妥当か調べれば OK です。
 
- ソースコード TODO
+ $m = 2, 3$ の場合は全探索でよいでしょう。$a_i$たちは相異なるので、$n \le m$ であることに注意しましょう。
+ また$n = 1, m-1$の場合はそれぞれ$d = 0, 1$とするとよく、$n = m$ の場合は$(x, d) = (0, 1)$ が常に正答を与えます。
+
+ ソースコードは以下の通りです。\url{http://codeforces.com/contest/763/submission/35830261} です。
+ \lstinputlisting[caption=CF395-1C.cpp,label=CF395-1C.cpp]{CF395-1C.cpp}
 
 \begin{itembox}[l]{COLUMN}
  群論的なアプローチをすると、Algorithm~\ref{alg:simplified-tonelli-shanks} についてもっと綺麗な見方が得られます。
