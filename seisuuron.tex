@@ -482,7 +482,9 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
 
   doubleで計算を行うと誤差が出るので、次数$d$, 係数の最大値$u$として、$du^2 \le 10^{15}$くらいでないと整数演算のためには使えません。
   理由は、畳み込みの結果の係数は最大$du^2$程度で、整数として扱うため double の精度の関係で $du^2 < 2^{53}$でないといけないからです。$d \le 10^5, u\le 10^5$くらいでギリギリでしょう。
-  実装は省略するので、先に挙げたサイトを参考にするなどしてください。
+
+  一応実装を載せておきます。
+  \lstinputlisting[caption=fft.cpp,label=fft.cpp]{fft.cpp}
 
   \begin{itembox}[l]{COLUMN}
    NTT (number theoretic transformation) (FMT (fast modulo transformation) ともいう) という手法があります。これは、doubleの代わりに Proth prime $p = k \times 2^n + 1$ をmodとした環の上でFFTをするという手法です。
