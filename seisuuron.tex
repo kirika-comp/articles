@@ -208,7 +208,7 @@ Reference: \url{https://en.wikipedia.org/wiki/Tonelli%E2%80%93Shanks_algorithm}
 
 \begin{algorithm}                      
 \caption{単純化された Tonelli-Shanks のアルゴリズム}
-\label{alg1}
+\label{alg:simplified-tonelli-shanks}
 入力: $p (\ge 3)$: 奇素数, $a (\not \equiv 0 \pmod p)$: 平方剰余
 
 出力: $r^2 \equiv a \pmod p$ を満たす$r$
@@ -278,8 +278,8 @@ $m := 3, c :\equiv 7^5 = 16807 \equiv 38, t :\equiv 8^5 = 32768 \equiv 9, r \equ
  ソースコード TODO
 
 \begin{itembox}[l]{COLUMN}
- 群論的なアプローチをすると、もっと綺麗な見方が得られます。
-$(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-Sylow部分群\index{Sylowぶぶんぐん@Sylow部分群}) $H = \Z/2^s\Z$ を考えます。このとき、$z$ と $t$ は $H$ の元であることがわかります。$t$が$1$になるように、うまく$H^2$の元で調整しているわけです。
+ 群論的なアプローチをすると、Algorithm~\ref{alg:simplified-tonelli-shanks} についてもっと綺麗な見方が得られます。
+$(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-Sylow部分群\index{Sylowぶぶんぐん@Sylow部分群}) $H \cong \Z/2^s\Z$ を考えます。このとき、$z$ と $t$ は $H$ の元であることがわかります。$t$が$1$になるように、うまく$H^2 := \{h^2 \mid h \in H\}$の元で調整しているわけです。
 \end{itembox}
  \section{平方剰余の相互法則\level{4}}
   \subsection{ルジャンドル記号}
