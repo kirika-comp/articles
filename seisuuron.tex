@@ -390,84 +390,90 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
 
   この問題は筆者が writer でした。ソースコードを以下に載せます。\url{https://yukicoder.me/submissions/239504} からアクセスすることもできます。 (今回限り Java です。)
   \lstinputlisting[caption=yukicoder-613.java,label=yukicoder-613.java,language=Java]{yukicoder-613.java}
- \section{mod\_sqrt その2\level{3}}
- \label{sec:karp-mod-sqrt}
- \begin{theorem}
-  $p$ を奇素数とする。
-  ${} \bmod p$の0以外の平方剰余を$a_1, \ldots, a_{\frac{p-1}{2}}$ とする。
-  このとき
-  \begin{displaymath}
-   (x - a_1) \times (x - a_2) \times \cdots \times (x - a_{\frac{p-1}{2}})
-   \equiv x^{\frac{p-1}{2}}-1 \pmod p
-  \end{displaymath}
-  が成り立つ。
- \end{theorem}
- \begin{proof}
-  定理\ref{thm:polynomial-fermat} と同じ論法が使えます。
- \end{proof}
- これを利用したアルゴリズムを紹介します。このアルゴリズムは Lehmer によるものです。
+ \section{${}\bmod p$ のアルゴリズム その2}
+ \label{sec:mod-p-2}
+  \subsection{mod\_sqrt その2, Lehmer のアルゴリズム\level{3}}
+  \label{subsec:karp-mod-sqrt}
+  \begin{theorem}
+   $p$ を奇素数とする。
+   ${} \bmod p$の0以外の平方剰余を$a_1, \ldots, a_{\frac{p-1}{2}}$ とする。
+   このとき
+   \begin{displaymath}
+    (x - a_1) \times (x - a_2) \times \cdots \times (x - a_{\frac{p-1}{2}})
+    \equiv x^{\frac{p-1}{2}}-1 \pmod p
+   \end{displaymath}
+   が成り立つ。
+  \end{theorem}
+  \begin{proof}
+   定理\ref{thm:polynomial-fermat} と同じ論法が使えます。
+  \end{proof}
+  これを利用したアルゴリズムを紹介します。このアルゴリズムは Lehmer によるものです。
 
- \begin{algorithm}
-  \caption{\cite[Algorithm~3.1]{Karp1991}}
-  \label{alg:lehmer-mod-sqrt}
-  入力: $p$: 奇素数, $a$: $1 \le a < p$ を満たす平方剰余
+  \begin{algorithm}
+   \caption{\cite[Algorithm~3.1]{Karp1991}}
+   \label{alg:lehmer-mod-sqrt}
+   入力: $p$: 奇素数, $a$: $1 \le a < p$ を満たす平方剰余
 
-  出力: $r^2 = a$ を満たす$r$
+   出力: $r^2 = a$ を満たす$r$
 
-  1. $c \in (\Z/p\Z)^*$ をランダムに選び、$\legendre{c^2-a}{p} = -1$となるようにする。
+   1. $c \in (\Z/p\Z)^*$ をランダムに選び、$\legendre{c^2-a}{p} = -1$となるようにする。
 
-  2. 多項式 ($\finiteField{p}[x]$ の元) の最大公約数 $\gcd(x^{\frac{p-1}{2}} - 1, (x-c)^2 - a)$ を計算する。答えは1次式 $ux + v$ となる。$a$ の平方根は$\pm (c - u^{-1}v)$ なので、$+$ か $-$ のうちどちらかを出力する。
- \end{algorithm}
+   2. 多項式 ($\finiteField{p}[x]$ の元) の最大公約数 $\gcd(x^{\frac{p-1}{2}} - 1, (x-c)^2 - a)$ を計算する。答えは1次式 $ux + v$ となる。$a$ の平方根は$\pm (c - u^{-1}v)$ なので、$+$ か $-$ のうちどちらかを出力する。
+  \end{algorithm}
 
- 1.での選択にかかる時間の期待値が定数であることは、以下の定理で証明できます。
- \begin{theorem}[{\cite[Theorem~3.2]{Karp1991}}]
-  \label{thm:abundance-of-witnesses-in-karp1991}
-  $a \in (\Z/p\Z)^*$ を平方剰余とする。このとき、$c \in (\Z/p\Z)^*$ がランダムに選ばれるならば、確率$(p-3)/2(p-1)$以上で$\legendre{c^2-a}{p} = -1$ が成立する。
- \end{theorem}
- \begin{proof}
-  むずかしいノエ TODO
- \end{proof}
- また、このアルゴリズムの正当性については、以下のような観察により証明できます。
+  1.での選択にかかる時間の期待値が定数であることは、以下の定理で証明できます。
+  \begin{theorem}[{\cite[Theorem~3.2]{Karp1991}}]
+   \label{thm:abundance-of-witnesses-in-karp1991}
+   $a \in (\Z/p\Z)^*$ を平方剰余とする。このとき、$c \in (\Z/p\Z)^*$ がランダムに選ばれるならば、確率$(p-3)/2(p-1)$以上で$\legendre{c^2-a}{p} = -1$ が成立する。
+  \end{theorem}
+  \begin{proof}
+   むずかしいノエ TODO
+  \end{proof}
+  また、このアルゴリズムの正当性については、以下のような観察により証明できます。
 
- まず、$a$ は平方剰余なので、$r^2 \equiv a \pmod p$ となるような$r$が存在します。
- このような$r$ について、$(x-c)^2-a = (x - c -r) (x - c + r)$ です。
- 先ほどみたように$\legendre{c^2-a}{p} = -1$ で、命題\ref{prop:legendre-symbol-is-multiplicative} より$\legendre{c + r}{p}\legendre{c - r}{p} = -1$ です。
- そのため、$\legendre{c + r}{p}$ か $\legendre{c - r}{p}$ のどちらかは1でどちらかは$-1$となります。$x^{\frac{p-1}{2}}-1$ は全ての平方剰余$a$に対する$x-a$の積なので、最大公約数をとると平方剰余の方だけが残ります。
+  まず、$a$ は平方剰余なので、$r^2 \equiv a \pmod p$ となるような$r$が存在します。
+  このような$r$ について、$(x-c)^2-a = (x - c -r) (x - c + r)$ です。
+  先ほどみたように$\legendre{c^2-a}{p} = -1$ で、命題\ref{prop:legendre-symbol-is-multiplicative} より$\legendre{c + r}{p}\legendre{c - r}{p} = -1$ です。
+  そのため、$\legendre{c + r}{p}$ か $\legendre{c - r}{p}$ のどちらかは1でどちらかは$-1$となります。$x^{\frac{p-1}{2}}-1$ は全ての平方剰余$a$に対する$x-a$の積なので、最大公約数をとると平方剰余の方だけが残ります。
 
- このアルゴリズムの計算量についてですが、$r(x) = (x^{\frac{p-1}{2}} - 1) \bmod ((x-c)^2 - a)$ と置くと、$r(x)$ が求めたい最大公約数であることは明らかです。これは行列累乗などを用いることで $O(\log p)$ で計算できます。よって、このアルゴリズムの計算量は、$O(\log p)$です。
- \section{mod\_sqrt その3\level{4}}
- Cipolla のアルゴリズムと呼ばれるものを紹介します。\url{http://pekempey.hatenablog.com/entry/2017/02/03/220150} でも紹介されています。
+  このアルゴリズムの計算量についてですが、$r(x) = (x^{\frac{p-1}{2}} - 1) \bmod ((x-c)^2 - a)$ と置くと、$r(x)$ が求めたい最大公約数であることは明らかです。これは行列累乗などを用いることで $O(\log p)$ で計算できます。よって、このアルゴリズムの計算量は、$O(\log p)$です。
 
- \begin{algorithm}
-  \caption{Cipolla のアルゴリズム}
-  \label{alg:cipolla-mod-sqrt}
-  入力: $p$: 奇素数, $a$: $1 \le a < p$ を満たす平方剰余
+  実装 TODO
+  \subsection{mod\_sqrt その3, Cipolla のアルゴリズム\level{4}}
+  Cipolla のアルゴリズムと呼ばれるものを紹介します。\url{http://pekempey.hatenablog.com/entry/2017/02/03/220150} でも紹介されています。
 
-  出力: $r^2 = a$ を満たす$r$
+  \begin{algorithm}
+   \caption{Cipolla のアルゴリズム}
+   \label{alg:cipolla-mod-sqrt}
+   入力: $p$: 奇素数, $a$: $1 \le a < p$ を満たす平方剰余
 
-  1. $c \in (\Z/p\Z)^*$ をランダムに選び、$\legendre{c^2-a}{p} = -1$となるようにする。
+   出力: $r^2 = a$ を満たす$r$
 
-  2. $\theta = \sqrt{c^2-a}$ として体拡大$\finiteField{p}(\theta)$ を考える。
-  $(c + \theta)^{\frac{p+1}{2}}$ は $\finiteField{p}$ の元であり、これが答え (平方根の一つ) を与える。
- \end{algorithm}
+   1. $c \in (\Z/p\Z)^*$ をランダムに選び、$\legendre{c^2-a}{p} = -1$となるようにする。
 
- \begin{proposition}
-  Algorithm~\ref{alg:cipolla-mod-sqrt}は正しい解を与える。
- \end{proposition}
- \begin{proof}
-  \ref{subsec:application-of-frobenius} でみたように、$(c+\theta)^{p} = c - \theta$ となるのは自明です。よって$(c+\theta)^{p+1} = c^2-\theta^2 = a$ です。
-  よって$(c+\theta)^{\frac{p+1}2} \in \finiteField{p}$ が示せれば良いです。
+   2. $\theta = \sqrt{c^2-a}$ として体拡大$\finiteField{p}(\theta)$ を考える。
+   $(c + \theta)^{\frac{p+1}{2}}$ は $\finiteField{p}$ の元であり、これが答え (平方根の一つ) を与える。
+  \end{algorithm}
 
-  より一般に$(x+y\theta)^2 = a$ ならば$y = 0$ を示します。
-  $(x+y\theta)^2 = (x^2+(c^2-a)y^2) + 2xy\theta$ であり、$1$ と $\theta$ が$\finiteField{p}$ 上線形独立であることから、$2xy = 0$ であることがわかります。$p$は奇素数なので、$x=0$ あるいは $y=0$ が成り立ちます。ここで$x = 0$, $y \neq 0$ だとしましょう。このとき$a = (y\theta)^2 = (c^2-a)y^2$ ですが、$c^2-a$ が平方非剰余となるように$c$を選んだので、矛盾します。
- \end{proof}
- \begin{remark}
-  あるいは、これは単に、$\finiteField{p}(\theta)$が体であるため、方程式 $x^2-a = 0$は$\finiteField{p}(\theta)$上に根を最大2個しか持たず、$a$が平方剰余であるためそれらは$\finiteField{p}$の元であるような2個だけである、ということもできます。
- \end{remark}
- このアルゴリズムの計算量は、$O(\log p)$ です。
- \section{多項式を使うテク\level{4}}
+  \begin{proposition}
+   Algorithm~\ref{alg:cipolla-mod-sqrt}は正しい解を与える。
+  \end{proposition}
+  \begin{proof}
+   \ref{subsec:application-of-frobenius} でみたように、$(c+\theta)^{p} = c - \theta$ となるのは自明です。よって$(c+\theta)^{p+1} = c^2-\theta^2 = a$ です。
+   よって$(c+\theta)^{\frac{p+1}2} \in \finiteField{p}$ が示せれば良いです。
+
+   より一般に$(x+y\theta)^2 = a$ ならば$y = 0$ を示します。
+   $(x+y\theta)^2 = (x^2+(c^2-a)y^2) + 2xy\theta$ であり、$1$ と $\theta$ が$\finiteField{p}$ 上線形独立であることから、$2xy = 0$ であることがわかります。$p$は奇素数なので、$x=0$ あるいは $y=0$ が成り立ちます。ここで$x = 0$, $y \neq 0$ だとしましょう。このとき$a = (y\theta)^2 = (c^2-a)y^2$ ですが、$c^2-a$ が平方非剰余となるように$c$を選んだので、矛盾します。
+  \end{proof}
+  \begin{remark}
+   あるいは、これは単に、$\finiteField{p}(\theta)$が体であるため、方程式 $x^2-a = 0$は$\finiteField{p}(\theta)$上に根を最大2個しか持たず、$a$が平方剰余であるためそれらは$\finiteField{p}$の元であるような2個だけである、ということもできます。
+  \end{remark}
+  このアルゴリズムの計算量は、$O(\log p)$ です。
+
+  実装 TODO
+ \section{多項式を使うテク~\level{4}}
  \label{sec:technique-using-polynomials}
-  \subsection{高速フーリエ変換 (FFT)}
+  \subsection{高速フーリエ変換 (FFT)~\level{3}}
   \label{subsec:fft}
   数列$a_0, a_1, \ldots, a_{n-1}$ と $b_0, b_1, \ldots, b_{n-1}$に対して、$a$ と $b$ の\emph{畳み込み}\index{たたみこみ@畳み込み} (\emph{convolution}) とは、数列$c_i := \sum_{j=0}^{i} a_jb_{i-j}$ のことです。多項式の積の係数も、畳み込みだと思うことができます。
 
@@ -484,7 +490,7 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
    詳しくは\url{http://math314.hateblo.jp/entry/2015/05/07/014908} を見てください。
    原始根とか使います。実装重いです。実装したくないです。
   \end{itembox}
-  \subsection{フェルマーの小定理}
+  \subsection{フェルマーの小定理~\level{3}}
   \begin{theorem}
    \label{thm:polynomial-fermat}
    素数$p$に対して、以下の等式が成り立つ:
@@ -547,7 +553,7 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
   以上から$O(p(\log p)^2 + (\log n)^2)$時間の解法が得られました。以下にソースコードを載せます。\url{https://www.codechef.com/viewsolution/17544576} です。
   実装には NTT を用いました。double での計算でもおそらく正解できますが、検証していません。
   \lstinputlisting[caption=FEB18-LUCASTH.cpp,label=FEB18-LUCASTH.cpp]{FEB18-LUCASTH.cpp}
-  \subsection{原始根}
+  \subsection{原始根~\level{4}}
   \label{subsec:convolution-with-primitive-roots}
   \url{http://techtipshoge.blogspot.jp/2012/04/facebook-hacker-cup-2011-round2-scott.html}
   まだ理解していないちょく
