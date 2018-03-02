@@ -488,9 +488,8 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
 
   \begin{itembox}[l]{COLUMN}
    NTT (number theoretic transformation) (FMT (fast modulo transformation) ともいう) という手法があります。これは、doubleの代わりに Proth prime $p = k \times 2^n + 1$ をmodとした環の上でFFTをするという手法です。
-   整数演算なので誤差が出ないのが嬉しいです。(mod 演算のせいで定数倍重めですが…。)(ちゃんと調べていないのでわかりませんが TODO)
+   整数演算なので誤差が出ないのが嬉しいです。その上、doubleの上で行うFFTと比べてもパフォーマンスに大きな違いはありません。
    詳しくは\url{http://math314.hateblo.jp/entry/2015/05/07/014908} を見てください。
-   原始根とか使います。実装重いです。実装したくないです。
   \end{itembox}
   \subsection{フェルマーの小定理~\level{3}}
   \begin{theorem}
@@ -556,7 +555,7 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
   実装には double 型の演算を用いた FFT を用いました。FFT の部分はソースコード\ref{fft.cpp} と同じです。と25行目において、1の$n$乗根$\zeta$の$i$乗を愚直に計算していることに注意しましょう。(これをサボろうとすると誤差死します。ていうかしました)
   \lstinputlisting[caption=FEB18-LUCASTH.cpp,label=FEB18-LUCASTH.cpp]{FEB18-LUCASTH.cpp}
 
-  また、 math314 のブログ記事を参考にした NTT による実装も行いました。
+  また、 \url{http://math314.hateblo.jp/entry/2015/05/07/014908} を参考にした NTT による実装も行いました。
   ソースコードは割愛しますが、\url{https://www.codechef.com/viewsolution/17544576} で公開されています。double型FFTは2.22secで、NTTは2.72secで終了したので、両者に大きなパフォーマンスの違いはありません。(NTTは3並列でやったので、2並列にしたらNTTの方が早くなる可能性もあります。)
   \subsection{原始根~\level{4}}
   \label{subsec:convolution-with-primitive-roots}
@@ -719,7 +718,10 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
   \item かならい (@sugarknri)
  \end{itemize}
  感謝します。
- これを読んでくださる読者の方にも感謝の念を禁じえません。
+
+ % 筆者が NOIR というアニメを最初に知ったのは、2017年8月ごろだったと記憶しています。ラテン語の曲を探していたら、偶然 Salva nos という戦闘曲にあたり、そこから NOIR というアニメを知りました。その後2017年10月に、NOIRの主人公の夕叢霧香 (ゆうむらきりか) のなりきりアカウントを作り、活動をはじめました。なりきりアカウントを作ったおかげで、精進が進んだように思われます。また、整数論テクニック集を作るに至ったきっかけも、なりきりアカウントでの会話がきっかけだったので、これなしでは本稿は存在し得なかったでしょう。
+
+ 最後に、これを読んでくださった読者の方に感謝を述べて、筆を置かせていただきます。
 
 \bibliographystyle{jplain}
 \bibliography{./references}
