@@ -552,9 +552,12 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
   次に$P(r)$ですが、$P(r)$は$r$次なので、$r < p - 1$ならば$(-t^{p-1}+1)^q$と干渉しないことが分かります。よって答えは$(d_{e-1} + 1) \times (d_{e-2} + 1) \times \cdots \times (d_0 + 1) \times (P(r)\bmod p\mbox{の0でない係数})$であることが分かります。
   $r = p - 1$の時は、$P(r) \equiv P(p) \pmod p$ より、$n = (q + 1)p$の時と同じ答えになることが分かります。
 
-  以上から$O(p(\log p)^2 + (\log n)^2)$時間の解法が得られました。以下にソースコードを載せます。\url{https://www.codechef.com/viewsolution/17544576} です。
-  実装には NTT を用いました。double での計算でもおそらく正解できますが、検証していません。
+  以上から$O(p(\log p)^2 + (\log n)^2)$時間の解法が得られました。以下にソースコードを載せます。\url{https://www.codechef.com/viewsolution/17576449} です。
+  実装には double 型の演算を用いた FFT を用いました。FFT の部分はソースコード\ref{fft.cpp} と同じです。と25行目において、1の$n$乗根$\zeta$の$i$乗を愚直に計算していることに注意しましょう。(これをサボろうとすると誤差死します。ていうかしました)
   \lstinputlisting[caption=FEB18-LUCASTH.cpp,label=FEB18-LUCASTH.cpp]{FEB18-LUCASTH.cpp}
+
+  また、 math314 のブログ記事を参考にした NTT による実装も行いました。
+  ソースコードは割愛しますが、\url{https://www.codechef.com/viewsolution/17544576} で公開されています。double型FFTは2.22secで、NTTは2.72secで終了したので、両者に大きなパフォーマンスの違いはありません。(NTTは3並列でやったので、2並列にしたらNTTの方が早くなる可能性もあります。)
   \subsection{原始根~\level{4}}
   \label{subsec:convolution-with-primitive-roots}
   \url{http://techtipshoge.blogspot.jp/2012/04/facebook-hacker-cup-2011-round2-scott.html}
