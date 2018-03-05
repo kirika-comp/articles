@@ -360,9 +360,13 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
   \end{example}
   \subsection{2次体}
   \label{subsec:quadratic-field}
+  体$K$に、$\theta \not \in K$ なる要素$\theta$ を追加することを、$\theta$ を\defineRuby{添加}{てんか}するといい、そうしてできた体を$K(\theta)$ と表記します。
   有理数体 $\Q$ に有理数の平方根$\sqrt{d}$を添加した体 $\Q(\sqrt{d})$ を、\emph{2次体}\index{にじたい@2次体} (\emph{quadratic field})と呼びます。
+  2次体は古くから性質が研究されていて、理論も深いものがあります。この記事では、競技プログラミングに関連する部分を、主に取り上げたいと思います。
   \subsection{有限体}
   任意の素数$p$と正の整数$e$に対して、$p^e$要素の有限体が存在します。逆に、有限体の要素数は、必ず$p^e$ の形で表せます。このような有限体は、一意に存在します。これを$\finiteField{p^e}$と表記することにします。
+
+  $\finiteField{p^e}$ は、$\finiteField{p}$ にある要素を添加することで得ることができます。つまり、ある要素$\theta$に対して、$\finiteField{p^e} \cong \finiteField{p}(\theta)$ です。
   \subsection{フロベニウス写像}
   $\Frob \colon \finiteField{p^e} \to \finiteField{p^e}, \Frob(x) := x^p$ を\emph{フロベニウス写像}\index{ふろべにうすしゃぞう@フロベニウス写像}と呼びます。 TODO
   \begin{proposition}
