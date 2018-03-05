@@ -457,13 +457,14 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
 
    出力: $r^2 = a$ を満たす$r$
 
-   1. $c \in (\Z/p\Z)^*$ をランダムに選び、$\legendre{c^2-a}{p} = -1$となるようにする。
+   1. $c \in \Z/p\Z$ をランダムに選び、$\legendre{c^2-a}{p} = -1$となるようにする。
 
    2. $\theta = \sqrt{c^2-a}$ として体拡大$\finiteField{p}(\theta)$ を考える。
    $(c + \theta)^{\frac{p+1}{2}}$ は $\finiteField{p}$ の元であり、これが答え (平方根の一つ) を与える。
   \end{algorithm}
 
   \begin{proposition}
+   \label{prop:cipolla-mod-sqrt-is-correct}
    Algorithm~\ref{alg:cipolla-mod-sqrt}は正しい解を与える。
   \end{proposition}
   \begin{proof}
@@ -476,9 +477,13 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
   \begin{remark}
    あるいは、これは単に、$\finiteField{p}(\theta)$が体であるため、方程式 $x^2-a = 0$は$\finiteField{p}(\theta)$上に根を最大2個しか持たず、$a$が平方剰余であるためそれらは$\finiteField{p}$の元であるような2個だけである、ということもできます。
   \end{remark}
-  このアルゴリズムの計算量は、$O(\log p)$ です。
+  このアルゴリズムの計算量は、冪乗を何回か計算するだけなので、$O(\log p)$ です。
 
-  実装 TODO
+  実装を与えます。
+  \lstinputlisting[caption=cipolla.cpp,label=cipolla.cpp]{cipolla.cpp}
+  \begin{remark}
+   このアルゴリズムに、$a$ として平方非剰余を与えると、命題\ref{prop:cipolla-mod-sqrt-is-correct}の証明中の議論で、$y=0$ではなく$x=0$が成立します。よって、ソースコード\ref{cipolla.cpp}の実装では、常に0が返ることになります。
+  \end{remark}
  \section{多項式を使うテク~\level{4}}
  \label{sec:technique-using-polynomials}
   \subsection{高速フーリエ変換 (FFT)~\level{3}}
