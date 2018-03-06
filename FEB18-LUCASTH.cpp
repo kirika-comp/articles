@@ -40,7 +40,7 @@ void fft(int n,vector<comp> &a,double dir) {
 }
 
 template<class T>
-vector<comp> convolution(vector<T> a,vector<T> b){
+vector<comp> convolution(const vector<T> &a,const vector<T> &b){
   int n=1;
   while(n<(int)a.size()+(int)b.size())n*=2;
   vector<comp>a_(n),b_(n);
@@ -55,11 +55,8 @@ vector<comp> convolution(vector<T> a,vector<T> b){
 
 
 // 要素数n, 要素の最大値をcとしたとき、n * c^2 <= 10^15 でなければ精度が保証されない。
-vector<lint> integral_convolution(vector<lint> a,vector<lint> b){
-  vector<comp>a_(a.size()),b_(b.size());
-  rep(i,a.size())a_[i]=a[i];
-  rep(i,b.size())b_[i]=b[i];
-  vector<comp>ans=convolution(a_,b_);
+vector<lint> integral_convolution(const vector<lint> &a,const vector<lint> &b){
+  vector<comp>ans=convolution(a,b);
   vector<lint>ret(ans.size());
   rep(i,ans.size())ret[i]=floor(ans[i].real()+0.5);
   return ret;
