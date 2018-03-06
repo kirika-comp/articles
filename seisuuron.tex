@@ -491,7 +491,9 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
    Algorithm~\ref{alg:cipolla-mod-sqrt}は正しい解を与える。
   \end{proposition}
   \begin{proof}
-   \ref{subsec:application-of-frobenius} でみたように、$(c+\theta)^{p} = c - \theta$ となるのは自明です。よって$(c+\theta)^{p+1} = c^2-\theta^2 = a$ です。
+   Algorithm~\ref{alg:lehmer-mod-sqrt} と同様に、1.にかかる時間の期待値は、定数で抑えることができます。
+
+   2.について調べましょう。\ref{subsec:application-of-frobenius} でみたように、$(c+\theta)^{p} = c - \theta$ となることが示せます。よって$(c+\theta)^{p+1} = c^2-\theta^2 = a$ です。
    よって$(c+\theta)^{\frac{p+1}2} \in \finiteField{p}$ が示せれば良いです。
 
    より一般に$(x+y\theta)^2 = a$ ならば$y = 0$ を示します。
