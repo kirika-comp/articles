@@ -31,8 +31,10 @@
  \section{mod $p$上の計算 (モジュラー演算)}
  \label{sec:mod-p-arithmetic}
   \subsection{基本: 整数の加減乗除\level{1}}
-  計算結果が大きすぎるため、${} \bmod (10^9+7)$で出力せよ、という問題が結構あります。
-  このような問題の場合は、最終結果を${} \bmod (10^9+7)$するのではなく、途中結果も${} \bmod (10^9+7)$することで、途中結果が大きくなりすぎるのを防ぐことができます。
+  計算結果が大きすぎるため、適当な素数 $p$ に対して${} \bmod p$で出力せよ、という問題が結構あります。
+  このような問題の場合は、最終結果を${} \bmod p$するのではなく、途中結果も${} \bmod p$することで、多倍長整数などを使わずに計算することができます。例えば、$abc \bmod p$ を計算したい時は、代わりに$((ab \bmod p) \times c) \bmod p$ を計算する、というようにすることができます。
+
+  素数 $p$ については、入力として与えられる場合と、問題に固有の値が設定される場合があります。後者の場合は、$p$として$10^9 + 7$, $10^9 + 9$, $998244353$ などの値が設定されることが多いです。これらの値は、有名な素数として覚えてしまいましょう。
 
   なお除算については、次のサブセクションで説明する逆元を掛けることで実装することができます。
   \subsection{基本: 逆元\level{1}}
@@ -276,7 +278,7 @@ $m := 3, c :\equiv 7^5 = 16807 \equiv 38, t :\equiv 8^5 = 32768 \equiv 9, r \equ
  平均は$x + d(n - 1) / 2$, 分散は$(n-1)(n+1)d^2/12$です。($n \neq 1, m-1,m$, $m \neq 2, 3$ならば) ここから$d$が復元でき、$x$も復元できます。最後に復元した$x, d$が妥当か調べれば OK です。
 
  $m = 2, 3$ の場合は全探索でよいでしょう。$a_i$たちは相異なるので、$n \le m$ であることに注意しましょう。
- また$n = 1, m-1$の場合はそれぞれ$d = 0, 1$とするとよく、$n = m$ の場合は$(x, d) = (0, 1)$ が常に正答を与えます。
+ また$n = 1, m-1$の場合はそれぞれ$d = 0, 1$とするとよく、$n = m$ の場合は$\tuple{x, d} = \tuple{0, 1}$ が常に正答を与えます。
 
  ソースコードは以下の通りです。\url{http://codeforces.com/contest/763/submission/35830261} です。
  \lstinputlisting[caption=CF395-1C.cpp,label=CF395-1C.cpp]{CF395-1C.cpp}
@@ -285,7 +287,7 @@ $m := 3, c :\equiv 7^5 = 16807 \equiv 38, t :\equiv 8^5 = 32768 \equiv 9, r \equ
  群論的なアプローチをすると、Algorithm~\ref{alg:simplified-tonelli-shanks} についてもっと綺麗な見方が得られます。
 $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-Sylow部分群\index{Sylowぶぶんぐん@Sylow部分群}) $H \cong \Z/2^s\Z$ を考えます。このとき、$z$ と $t$ は $H$ の元であることがわかります。$t$が$1$になるように、うまく$H^2 := \{h^2 \mid h \in H\}$の元で調整しているわけです。
 \end{itembox}
- \section{平方剰余の相互法則\level{4}}
+ \section{平方剰余の相互法則と2次体\level{4}}
   \subsection{ルジャンドル記号}
   \label{subsec:legendre-symbol}
   ルジャンドル記号\index{るじゃんどるきごう@ルジャンドル記号}とは、以下で定義されるものです。
@@ -361,8 +363,8 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
   \subsection{2次体}
   \label{subsec:quadratic-field}
   体$K$に、$\theta \not \in K$ なる要素$\theta$ を追加することを、$\theta$ を\defineRuby{添加}{てんか}するといい、そうしてできた体を$K(\theta)$ と表記します。
-  有理数体 $\Q$ に有理数の平方根$\sqrt{d}$を添加した体 $\Q(\sqrt{d})$ を、\emph{2次体}\index{にじたい@2次体} (\emph{quadratic field})と呼びます。
-  2次体は古くから性質が研究されていて、理論も深いものがあります。この記事では、競技プログラミングに関連する部分を、主に取り上げたいと思います。
+  有理数体 $\Q$ に、平方数でない整数 $d$ の平方根 $\sqrt{d}$を添加した体 $\Q(\sqrt{d})$ を、\emph{2次体}\index{にじたい@2次体} (\emph{quadratic field})と呼びます。
+  2次体は古くから性質が研究されていて、理論も深いものがあります。このセクションおよびこの記事の後の方では、競技プログラミングに関連する部分を、主に取り上げたいと思います。
   \subsection{有限体}
   任意の素数$p$と正の整数$e$に対して、$p^e$要素の有限体が存在します。逆に、有限体の要素数は、必ず$p^e$ の形で表せます。このような有限体は、一意に存在します。これを$\finiteField{p^e}$と表記することにします。
 
@@ -403,6 +405,7 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
   \subsection{mod\_sqrt その2, Lehmer のアルゴリズム\level{3}}
   \label{subsec:karp-mod-sqrt}
   \begin{theorem}
+   \label{thm:quadratic-residue-fermat}
    $p$ を奇素数とする。
    ${} \bmod p$の0以外の平方剰余を$a_1, \ldots, a_{\frac{p-1}{2}}$ とする。
    このとき
@@ -435,25 +438,25 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
    $p$ を奇素数、$a \in (\Z/p\Z)^*$ を平方剰余とする。このとき、$c \in \Z/p\Z$ が一様にランダムに選ばれるならば、確率$(p-1)/2p$で$\legendre{c^2-a}{p} = -1$ が成立する。
   \end{theorem}
   \begin{proof}
-   まず、$x^2 - y^2 = a$ を満たす$(x, y) \in (\Z/p\Z)^2$の個数を計算しましょう。
+   まず、$x^2 - y^2 = a$ を満たす$\tuple{x, y} \in (\Z/p\Z)^2$の個数を計算しましょう。
    以下の事実に着目します。
    \begin{center}
-    $G := \{(x, y, a) \in (\Z/p\Z)^2 \times (\Z/p\Z)^* \mid x^2 - y^2 = a \}$ としたとき、$G$には以下により群構造が入る。
+    $G := \{\tuple{x, y, a} \in (\Z/p\Z)^2 \times (\Z/p\Z)^* \mid x^2 - y^2 = a \}$ としたとき、$G$には以下により群構造が入る。
     \begin{align*}
-     e &:= (1, 0, 1),\\
-     (x, y, a) * (z, w, b) &:= (xz + yw, xw+yz, ab),\\
-     (x, y, a)^{-1} &:= (xa^{-1}, -ya^{-1}, a^{-1})
+     e &:= \tuple{1, 0, 1},\\
+     \tuple{x, y, a} * \tuple{z, w, b} &:= \tuple{xz + yw, xw+yz, ab},\\
+     \tuple{x, y, a}^{-1} &:= \tuple{xa^{-1}, -ya^{-1}, a^{-1}}
     \end{align*}
    \end{center}
-   任意の$a \in (\Z/p\Z)^*$に対して、$x^2-y^2=a$となる$(x,y)\in (\Z/p\Z)^2$ が存在します。これは、$a$が平方剰余の場合は自明で、$a$が最小の平方非剰余の場合は$a-1$が平方剰余であることから$(\sqrt{a-1})^2-(\sqrt{-1})^2=a$とすればよく、$a$がそれ以外の平方非剰余の場合は、$G$の群構造を利用すれば良いことからわかります。TODO
+   任意の$a \in (\Z/p\Z)^*$に対して、$x^2-y^2=a$となる$\tuple{x,y}\in (\Z/p\Z)^2$ が存在します。これは、$a$が平方剰余の場合は自明で、$a$が最大の平方非剰余の場合は$a+1$が平方剰余であることから$(\sqrt{a+1})^2-1^2=a$とすればよく、$a$がそれ以外の平方非剰余の場合は、$G$の群構造を利用すれば良いことからわかります。
 
-   また、このような$(x,y)$の個数は$a$に依存しません。適当に$(u,v,a)\in G$となるような$(u,v)$を選ぶことで、全単射$\{(x, y) \mid (x,y,1) \in G \} \to \{(x, y) \mid (x, y, a) \in G\}$が掛け算として構成できるからです。
-   以上から、各$a \in (\Z/p\Z)^*$ に対して、$x^2 - y^2 = a$ を満たす$(x, y) \in (\Z/p\Z)^2$の個数が$|G|/(p-1)$であることが分かりました。$|G|$ を計算します。
+   また、このような$\tuple{x,y}$の個数は$a$に依存しません。適当に$\tuple{u,v,a}\in G$となるような$u,v$を選ぶことで、全単射$\{\tuple{x, y} \mid \tuple{x,y,1} \in G \} \to \{\tuple{x, y} \mid \tuple{x, y, a} \in G\}$が掛け算として構成できるからです。
+   以上から、各$a \in (\Z/p\Z)^*$ に対して、$x^2 - y^2 = a$ を満たす$\tuple{x,y} \in (\Z/p\Z)^2$の個数が$|G|/(p-1)$であることが分かりました。$|G|$ を計算します。
 
-   $x^2-y^2 = 0$ を満たす$(x,y)$は何個存在するでしょうか? $x = 0$ ならば $y = 0$ で、
+   $x^2-y^2 = 0$ を満たす$\tuple{x,y}$は何個存在するでしょうか? $x = 0$ ならば $y = 0$ で、
    $x \neq 0$ ならば、$y$ は $y = \pm x$ の2個存在するので、合計 $(2p-1)$ 個です。よって、$|G| = p^2 - (2p - 1) = (p - 1)^2$ が成り立ちます。
 
-   以上から、$a \in (\Z/p\Z)^*$ を固定したとき、$x^2-y^2=a$ を満たす $(x, y)$ はちょうど $(p - 1)$ 個存在することが分かりました。求めたいものは、$a$ が平方剰余であることを仮定した場合の、$x^2-y^2=a$ を満たす $y$ が存在しないような $x$ の個数です。$x = \pm \sqrt{a}$ のときは $y = 0$ が条件を満たします。$x$ がそれ以外の場合は、条件を満たす$y$は存在しないか2個存在するかのいずれかです。よって、$y$が存在しないような$x$の個数は、$p - 2 - (p - 1 - 2)/2 = (p - 1)/2$ 個であることが分かりました。
+   以上から、$a \in (\Z/p\Z)^*$ を固定したとき、$x^2-y^2=a$ を満たす $\tuple{x,y}$ はちょうど $(p - 1)$ 個存在することが分かりました。求めたいものは、$a$ が平方剰余であることを仮定した場合の、$x^2-y^2=a$ を満たす $y$ が存在しないような $x$ の個数です。$x = \pm \sqrt{a}$ のときは $y = 0$ が条件を満たします。$x$ がそれ以外の場合は、条件を満たす$y$は存在しないか2個存在するかのいずれかです。よって、$y$が存在しないような$x$の個数は、$p - 2 - (p - 1 - 2)/2 = (p - 1)/2$ 個であることが分かりました。
 
    よって、問題の確率は$(p-1)/2p$です。
   \end{proof}
@@ -462,7 +465,7 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
   まず、$a$ は平方剰余なので、$r^2 \equiv a \pmod p$ となるような$r$が存在します。
   このような$r$ について、$(x-c)^2-a = (x - c -r) (x - c + r)$ です。
   先ほどみたように$\legendre{c^2-a}{p} = -1$ で、命題\ref{prop:legendre-symbol-is-multiplicative} より$\legendre{c + r}{p}\legendre{c - r}{p} = -1$ です。
-  そのため、$\legendre{c + r}{p}$ か $\legendre{c - r}{p}$ のどちらかは1でどちらかは$-1$となります。$x^{\frac{p-1}{2}}-1$ は全ての平方剰余$a$に対する$x-a$の積なので、最大公約数をとると平方剰余の方だけが残ります。
+  そのため、$\legendre{c + r}{p}$ か $\legendre{c - r}{p}$ のどちらかは1でどちらかは$-1$となります。定理\ref{thm:quadratic-residue-fermat}より、$x^{\frac{p-1}{2}}-1$ は全ての平方剰余$a$に対する$x-a$の積です。よって、$(x - c -r) (x - c + r)$ と $x^{\frac{p-1}{2}}-1$ の最大公約数をとると、$c\pm r$ のうち平方剰余の方だけが残ります。
 
   このアルゴリズムの計算量についてですが、$r(x) = (x^{\frac{p-1}{2}} - 1) \bmod ((x-c)^2 - a)$ と置くと、$r(x)$ が求めたい最大公約数であることは明らかです。これは行列累乗などを用いることで $O(\log p)$ で計算できます。よって、このアルゴリズムの計算量は、$O(\log p)$です。
 
@@ -508,7 +511,7 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
  \label{sec:technique-using-polynomials}
   \subsection{高速フーリエ変換 (FFT)~\level{3}}
   \label{subsec:fft}
-  数列$a_0, a_1, \ldots, a_{n-1}$ と $b_0, b_1, \ldots, b_{n-1}$に対して、$a$ と $b$ の\emph{畳み込み}\index{たたみこみ@畳み込み} (\emph{convolution}) とは、数列$c_i := \sum_{j=0}^{i} a_jb_{i-j}$ のことです。多項式の積の係数も、畳み込みだと思うことができます。
+  数列$a_0, a_1, \ldots, a_{n-1}$ と $b_0, b_1, \ldots, b_{n-1}$に対して、$a$ と $b$ の\emph{畳み込み}\index{たたみこみ@畳み込み} (\emph{convolution}) とは、数列$c_i := \sum_{(j+k)\%n=i} a_{j}b_{k}$ ($0 \le i \le n - 1$) のことです。多項式の積の係数も、畳み込みだと思うことができます。
 
   \emph{高速フーリエ変換} (\emph{fast Fourier transform}, FFT) という手法を使うことで、$d$項の数列の畳み込みの計算量が$O(d^2)$から$O(d \log d)$になります。よって、$d$次多項式の乗算も、同じ計算量でできます。
   詳しくは、\url{https://atc001.contest.atcoder.jp/tasks/fft_c} を参考にしてください。
@@ -516,7 +519,7 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
   doubleで計算を行うと誤差が出るので、次数$d$, 係数の最大値$u$として、$du^2 \le 10^{15}$くらいでないと整数演算のためには使えません。
   理由は、畳み込みの結果の係数は最大$du^2$程度で、整数として扱うため double の精度の関係で $du^2 < 2^{53}$でないといけないからです。$d \le 10^5, u\le 10^5$くらいでギリギリでしょう。
 
-  一応実装を載せておきます。
+  実装を載せます。
   \lstinputlisting[caption=fft.cpp,label=fft.cpp]{fft.cpp}
 
   \begin{itembox}[l]{COLUMN}
@@ -585,7 +588,7 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
   $r = p - 1$の時は、$P(r) \equiv P(p) \pmod p$ より、$n = (q + 1)p$の時と同じ答えになることが分かります。
 
   以上から$O(p(\log p)^2 + (\log n)^2)$時間の解法が得られました。以下にソースコードを載せます。\url{https://www.codechef.com/viewsolution/17576449} です。
-  実装には double 型の演算を用いた FFT を用いました。FFT の部分はソースコード\ref{fft.cpp} と同じです。と25行目において、1の$n$乗根$\zeta$の$i$乗を愚直に計算していることに注意しましょう。(これをサボろうとすると誤差死します。ていうかしました)
+  実装には double 型の演算を用いた FFT を用いました。FFT の部分はソースコード\ref{fft.cpp} と同じです。25行目において、1の$n$乗根$\zeta$の$i$乗を愚直に計算していることに注意しましょう。(これをサボろうとすると誤差死します。ていうかしました)
   \lstinputlisting[caption=FEB18-LUCASTH.cpp,label=FEB18-LUCASTH.cpp]{FEB18-LUCASTH.cpp}
 
   また、 \url{http://math314.hateblo.jp/entry/2015/05/07/014908} を参考にした NTT による実装も行いました。
@@ -593,7 +596,7 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
   \subsection{原始根~\level{4}}
   \label{subsec:convolution-with-primitive-roots}
   \url{http://techtipshoge.blogspot.jp/2012/04/facebook-hacker-cup-2011-round2-scott.html}
-  まだ理解していないちょく
+  まだ理解していないちょく TODO
  \section{ペル方程式\level{4}}
  \label{sec:pells-equation}
  \begin{itembox}[l]{問題}
@@ -614,7 +617,7 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
  ここで、以下の事実が知られています。
  \begin{theorem}
   \label{thm:pells-equation-has-solutions}
-  $d$ が平方数でない正の整数のとき、方程式$x^2 - dy^2=1$は、正の整数解$(x,y)$を必ず持つ。
+  $d$ が平方数でない正の整数のとき、方程式$x^2 - dy^2=1$は、正の整数解$\tuple{x, y}$を必ず持つ。
  \end{theorem}
  このような方程式を\emph{ペル方程式}\index{ぺるほうていしき@ペル方程式} (\emph{Pell's equation}) と呼び、
  このような$(x,y)$のうち、$x$が最小のものを\emph{基本解}\index{きほんかい@基本解} (\emph{fundamental solution}) と呼びます。この問題では、基本解が計算できれば良いです。
@@ -666,7 +669,7 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
  \lstinputlisting[caption=aoj-2116.cpp,label=aoj-2116.cpp]{aoj-2116.cpp}
  \begin{itembox}[l]{COLUMN}
   定理\ref{thm:pells-equation-has-solutions} は、ディリクレの単数定理 (Dirichlet's unit theorem)~\cite[Theorem~5.13]{Stevenhagen2008} の特殊な場合で、$K = \Q(\sqrt{d})$ (実2次体) のオーダー $\Z[\sqrt{d}]$ の単数たちのなす乗法群 $U$ のランクが1である (つまり、$U \cong (\mbox{有限群}) \times \Z$ と表すことができる) ことを言っています。
-  $\Z$ 成分の生成元のことを\emph{基本単数}\index{きほんたんすう@基本単数} (\emph{fundamental unit}) と呼びますが、上のアルゴリズムで求めた$(x, y)$ が基本単数$x + y\sqrt{d}$ を与えます。
+  $\Z$ 成分の生成元のことを\emph{基本単数}\index{きほんたんすう@基本単数} (\emph{fundamental unit}) と呼びますが、上のアルゴリズムで求めた$\tuple{x, y}$ が基本単数$x + y\sqrt{d}$ を与えます。
   興味のある人は調べてみましょう。
  \end{itembox}
  \section{単項イデアル整域\level{5}}

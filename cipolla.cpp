@@ -2,7 +2,7 @@
 #include<random>
 using namespace std;
 typedef long long lint;
-typedef pair<lint,lint>pll; // 2次体の数をエンコードするためのもの。(x,y) は x+y*theta を表す。
+typedef pair<lint,lint>pll; // 2次体の数をエンコードするためのもの。<x,y> は x+y*theta を表す。
 
 lint powmod(lint a,lint e,lint p){
   a%=p;
