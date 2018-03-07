@@ -180,8 +180,9 @@
    \begin{example}
     $p = 13$ の場合を考えます。このとき、平方剰余は$0=0^2$,$1=1^2$,$3\equiv 4^2$,$4=2^2$,$9=3^2$,$10\equiv 6^2$,$12 \equiv 5^2 \pmod{13}$の7個です。0を除外すると1,3,4,9,10,12の6個で、${}\bmod 13$の0以外の同値類12個のうち、ちょうど半分が平方剰余、もう半分が平方非剰余です。なお、適当な平方非剰余$z$をとると、0以外の平方剰余に$z$を掛けたものはすべて平方非剰余です。例えば、$z=2$とすると、1,3,4,9,10,12に2を掛けて${}\bmod 13$したもの(2,6,8,5,7,11)はすべて平方非剰余です。
    \end{example}
+   \subsection{群\level{4}}
+   乗算と、乗算の逆元と、乗算の単位元が定義された集合のことを\defineRuby{群}{ぐん}と呼びます。
    \subsubsection{加法群\level{4}}
-   $\Z/p\Z$の話 TODO
    素数$p$ に対して、$p$で割った余り全体の集合を$\Z/p\Z$と書きます。$\Z/p\Z$ は、加法を演算として、群の構造を持ちます。
    この群は、真の部分群が存在しない群です。
    \subsubsection{乗法群\level{4}}
@@ -370,12 +371,15 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
 
   $\finiteField{p^e}$ は、$\finiteField{p}$ にある要素を添加することで得ることができます。つまり、ある要素$\theta$に対して、$\finiteField{p^e} \cong \finiteField{p}(\theta)$ です。
   \subsection{フロベニウス写像}
-  $\Frob \colon \finiteField{p^e} \to \finiteField{p^e}, \Frob(x) := x^p$ を\emph{フロベニウス写像}\index{ふろべにうすしゃぞう@フロベニウス写像}と呼びます。 TODO
+  $\Frob \colon \finiteField{p^e} \to \finiteField{p^e}, \Frob(x) := x^p$ を\emph{フロベニウス写像}\index{ふろべにうすしゃぞう@フロベニウス写像}と呼びます。
   \begin{proposition}
    $\Frob$は$e$回適用すると元に戻る。つまり、$\Frob^e(x) = x$。
   \end{proposition}
+  \begin{proof}
+   $\finiteField{p^e}$の元 $x\in \finiteField{p^e}$ は、すべて$x^{p^e}=x$を満たすことから、明らかです。
+  \end{proof}
   \begin{proposition}
-   $x, \Frob(x), \Frob^2(x), \ldots, \Frob^{e-1}(x)$ は全て共役(TODO definition)。つまり、TODO。
+   $x, \Frob(x), \Frob^2(x), \ldots, \Frob^{e-1}(x)$ は全て\defineRuby{共役}{きょうやく}。つまり、ある$\finiteField{p}$ 係数の$e$次多項式$f(t)$が存在して、$x, \Frob(x), \Frob^2(x), \ldots, \Frob^{e-1}(x)$ はすべて $f(t)=0$ の根である。
   \end{proposition}
   \subsection{応用例}
   \label{subsec:application-of-frobenius}
