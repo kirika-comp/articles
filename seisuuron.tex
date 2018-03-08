@@ -435,7 +435,7 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
 
    1. $c \in \Z/p\Z$ をランダムに選び、$\legendre{c^2-a}{p} = -1$となるようにする。
 
-   2. 多項式 ($\finiteField{p}[x]$ の元) の最大公約数 $\gcd(x^{\frac{p-1}{2}} - 1, (x-c)^2 - a)$ を計算する。答えは1次式 $ux + v$ となる。$a$ の平方根は$\pm (c - u^{-1}v)$ なので、$+$ か $-$ のうちどちらかを出力する。
+   2. 多項式 ($\finiteField{p}[x]$ の元) の最大公約数 $\gcd(x^{\frac{p-1}{2}} - 1, (x-c)^2 - a)$ を計算する。答えは1次式 $ux + v$ となる。$a$ の平方根は$\pm (c + u^{-1}v)$ なので、$+$ か $-$ のうちどちらかを出力する。
   \end{algorithm}
 
   1.での選択にかかる時間の期待値が定数で抑えられることは、以下の定理で証明できます。
@@ -471,11 +471,12 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
   まず、$a$ は平方剰余なので、$r^2 \equiv a \pmod p$ となるような$r$が存在します。
   このような$r$ について、$(x-c)^2-a = (x - c -r) (x - c + r)$ です。
   先ほどみたように$\legendre{c^2-a}{p} = -1$ で、命題\ref{prop:legendre-symbol-is-multiplicative} より$\legendre{c + r}{p}\legendre{c - r}{p} = -1$ です。
-  そのため、$\legendre{c + r}{p}$ か $\legendre{c - r}{p}$ のどちらかは1でどちらかは$-1$となります。定理\ref{thm:quadratic-residue-fermat}より、$x^{\frac{p-1}{2}}-1$ は全ての平方剰余$a$に対する$x-a$の積です。よって、$(x - c -r) (x - c + r)$ と $x^{\frac{p-1}{2}}-1$ の最大公約数をとると、$c\pm r$ のうち平方剰余の方だけが残ります。
+  そのため、$\legendre{c + r}{p}$ か $\legendre{c - r}{p}$ のどちらかは1でどちらかは$-1$となります。定理\ref{thm:quadratic-residue-fermat}より、$x^{\frac{p-1}{2}}-1$ は全ての平方剰余$a$に対する$x-a$の積です。よって、$(x - c -r) (x - c + r)$ と $x^{\frac{p-1}{2}}-1$ の最大公約数をとると、$c\pm r$ のうち平方剰余の方だけが残ります。残った方が$-u^{-1}v$ なので、$c \pm r = -u^{-1}v$ を解いて $r = \mp (c + u^{-1}v)$ です。
 
-  このアルゴリズムの計算量についてですが、$r(x) = (x^{\frac{p-1}{2}} - 1) \bmod ((x-c)^2 - a)$ と置くと、$r(x)$ が求めたい最大公約数であることは明らかです。これは行列累乗などを用いることで $O(\log p)$ で計算できます。よって、このアルゴリズムの計算量は、$O(\log p)$です。
+  このアルゴリズムの計算量についてですが、$r(x) = (x^{\frac{p-1}{2}} - 1) \bmod ((x-c)^2 - a)$ と置くと、$r(x)$ が求めたい最大公約数であることは明らかです。これは二分累乗法を用いることで $O(\log p)$ で計算できます。よって、このアルゴリズムの計算量は、$O(\log p)$です。
 
-  実装 TODO
+  実装を以下に載せます。
+  \lstinputlisting[caption=lehmer.cpp,label=lehmer.cpp]{lehmer.cpp}
   \subsection{mod\_sqrt その3, Cipolla のアルゴリズム\level{4}}
   Cipolla のアルゴリズムと呼ばれるものを紹介します。\url{http://pekempey.hatenablog.com/entry/2017/02/03/220150} でも紹介されています。
 
