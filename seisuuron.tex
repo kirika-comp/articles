@@ -599,10 +599,47 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
 
   また、 \url{http://math314.hateblo.jp/entry/2015/05/07/014908} を参考にした NTT による実装も行いました。
   ソースコードは割愛しますが、\url{https://www.codechef.com/viewsolution/17544576} で公開されています。double型FFTは2.16secで、NTTは2.72secで終了したので、両者に大きなパフォーマンスの違いはありません。(NTTは3並列でやったので、2並列にしたらNTTの方が早くなる可能性もあります。)
-  \subsection{原始根~\level{4}}
+  \subsection{原始根を用いた畳み込み~\level{4}}
   \label{subsec:convolution-with-primitive-roots}
-  \url{http://techtipshoge.blogspot.jp/2012/04/facebook-hacker-cup-2011-round2-scott.html}
-  まだ理解していないちょく TODO
+  \begin{itembox}[l]{問題}
+   素数$p$ と、長さ$n$の整数列$A$と、長さ $m$ の整数列 $B$ が与えられる。このとき、
+   $(A_i B_j) \bmod p < l$ となるような組$\tuple{i, j}$ の個数を求めよ。
+
+   制約: $2 \le p \le 250000$, $1 \le l \le p$, $2 \le n, m \le 10000000=10^7$
+
+   (出典: Facebook Hacker Cup 2011 Round2 - Scott's New Trick \url{http://techtipshoge.blogspot.jp/2012/04/facebook-hacker-cup-2011-round2-scott.html})
+  \end{itembox}
+  $p$ の大きさが比較的小さめなので、$A_i \bmod p$ と $B_j \bmod p$ の出現回数を記録しておいて、あとでまとめて加算するという手法が思いつきます。つまり、以下のような操作を行うということです:
+\begin{verbatim}
+ac=[],bc=[];
+for i in 0..n{
+  ac[a[i]%p]++;
+}
+for i in 0..m{
+  bc[b[i]%p]++;
+}
+ans=[];
+for i in 0..p{
+  for j in 0..p{
+    ans[(i*j)%p]+=ac[i]*bc[j];
+  }
+}
+\end{verbatim}
+  この手法だと計算量は $O(p^2)$ です。
+
+  これではうまく行かないので、高速化をしたいところです。
+  ここで、上の擬似コードに畳み込みのようなものが出現していることに着目します。畳み込みで加算になっているべきところが\verb+(i*j)%p+ になっています。
+  そのため、$(\Z/p\Z)^*$ の群構造に着目して、この問題を解きたいと思います。
+
+  $(\Z/p\Z)^*$は\defineRuby{巡回群}{じゅんかいぐん}であることが知られています。つまり、ある要素 $g \in (\Z/p\Z)^*$ が存在して、$(\Z/p\Z)^*$ の要素 $x \in (\Z/p\Z)^*$ はすべて、$x = g^i$ の形で表せるということです。このような$g$ のことを、${} \bmod p$ における\defineRuby{原始根}{げんしこん} (\emph{primitive root}) と呼びます。
+  ここで、$x = g^i$, $y = g^j$ とすると、$xy \bmod p = g^ig^j \bmod p = g^{i+j}$です。つまり、acやbcの添字を写像 $i \mapsto g^i$ で写せば、普通の畳み込みに帰着できます。
+
+  原始根の計算方法について説明します。ある要素 $a \in (\Z/p\Z)^*$ が原始根であるかどうかは、brute force により $O(p)$ 時間で検査できます。それでは、原始根はどのくらいの割合で存在するでしょうか?
+  ある原始根$g$に対して$a = g^i$ となっている場合、$\gcd(i, p - 1) = 1$ であることと
+  $a$ が原始根であることは同値です。
+  $p-1 = q_1^{e_1} \cdots q_k^{e^k}$を$p-1$の素因数分解とすると、上の条件を満たす$i$を選ぶ確率は$(q_1-1)\cdots(q_k-1)/q_1\cdots q_k$ です。$p\le 250000$ より、$k$ は最大でも$5$ 程度であり、$a$ が原始根である確率は十分大きいだと言えるでしょう。以上より、ランダムに$a$を選び、原始根かどうか調べることによって、原始根を得ることができます。(もっと高速な方法もあります。考えてみましょう)
+
+  実装するときは、$0$ 番目の要素の扱いに注意しましょう。$0$は$g^i$ の形で表せません。(この問題は公式のページが消えていて、実装してもジャッジできませんが…。)
  \section{ペル方程式\level{4}}
  \label{sec:pells-equation}
  \begin{itembox}[l]{問題}
