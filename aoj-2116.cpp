@@ -7,7 +7,7 @@ using namespace std;
 typedef long long lint;
 typedef pair<lint,lint>pll;
 
-// 連分数を使って、基本単数を求める。d は平方数でないことが要請される。
+// 連分数を使って、基本単数 (Pell 方程式の基本解) を求める。d は平方数でないことが要請される。
 pll fundamental_unit(lint d){
   vector<int> ans;
   lint x=0,z=1;//(x+sqrt(d))/z

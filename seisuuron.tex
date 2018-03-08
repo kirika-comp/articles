@@ -104,15 +104,15 @@
   を利用して、強引に冪乗公式に持っていくことを考えましょう。
   式の形から、$\cos \theta + i\sin\theta$なる数の計算、およびそれの累乗の計算ができれば良いことになります。ここで、以下のようにペアを用いて数を表現することにします:
   \begin{displaymath}
-   \langle a, b\rangle \mapsto a + ib\sin \theta
+   \tuple{a, b} \mapsto a + ib\sin \theta
   \end{displaymath}
   これにより掛け算、それゆえ冪乗が、整数ペアの上の演算として実装できます。どのようにするかみていきましょう。
 
-  まず、$\cos\theta + i\sin\theta$はもちろん、$\langle \cos\theta,1\rangle=\langle d/l,1\rangle$として表現されます。掛け算についてですが、
+  まず、$\cos\theta + i\sin\theta$はもちろん、$\tuple{\cos\theta,1}=\tuple{d/l,1}$として表現されます。掛け算についてですが、
   \begin{displaymath}
-   \langle a,b\rangle \times \langle c,d\rangle = (a+ib\sin\theta)(c+id\sin\theta)
+   \tuple{a, b} \times \tuple{c, d} = (a+ib\sin\theta)(c+id\sin\theta)
    =(ac-bd\sin^2\theta)+i(ad+bc)\sin\theta
-   =\langle ac+bd(\cos^2\theta-1), ad+bc\rangle
+   =\tuple{ac+bd(\cos^2\theta-1), ad+bc}
   \end{displaymath}
   より、問題なく実装することができます。これによりべき乗も問題なく実装でき、問題が解けます。
   \lstinputlisting[caption=BROCLK.cpp,label=BROCLK]{FEB18-BROCLK.cpp}
@@ -635,7 +635,7 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
   \label{alg:pells-equation}
   入力: $d$: 正の整数、平方数でない
 
-  出力: $x, y$: 正の整数, $x^2 - dy^2 = 1$を満たす、$x,y$ はその中で最小
+  出力: $\tuple{x, y}$, ただし$x, y$ は正の整数で $x^2 - dy^2 = 1$を満たす、$x,y$ はその中で最小
 
   1. $\alpha_0 := \sqrt{d}$ とする。
 
@@ -649,10 +649,10 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
 
   4. $b = x/y$ ($x$と$y$は互いに素な正の整数) としたとき、
   $x, y$ は $x^2 -dy^2 = \pm 1$ を満たす。
-  $x^2 - dy^2 = 1$ の場合、$x, y$を出力する。
-  $x^2 - dy^2 = -1$ の場合、$x^2 + dy^2, 2xy$を出力する。
+  $x^2 - dy^2 = 1$ の場合、$\tuple{x, y}$を出力する。
+  $x^2 - dy^2 = -1$ の場合、$\tuple{x^2 + dy^2, 2xy}$を出力する。
  \end{algorithm}
- 具体例として、$d = 14$ の場合にこのアルゴリズムがどう動くかを見て見ましょう。
+ 具体例として、$d = 14$ の場合にこのアルゴリズムがどう動くかを見てみましょう。
  数列 $\alpha_i$ と $q_i$ は以下のようになります:
  \begin{displaymath}
   \{a_i\}: \sqrt{14},
@@ -667,7 +667,7 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
  \begin{displaymath}
   b = [3; 1, 2, 1] = 15/4
  \end{displaymath}
- が成立します。$15^2 - 14 \times 4^2 = 1$であるため、出力は$15, 4$ となります。
+ が成立します。$15^2 - 14 \times 4^2 = 1$であるため、出力は$\tuple{15, 4}$ となります。
 
  実装するときの注意として、$\alpha_i$の表現方法があります。実は、$\alpha_i$ は $\alpha_i = (x +\sqrt{d}) / z$ ($x, z$ は整数) という形で表せることが知られているので、この$x, z$ を保持すれば良いです。
 
