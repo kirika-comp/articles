@@ -266,7 +266,23 @@ $m := 3, c :\equiv 7^5 = 16807 \equiv 38, t :\equiv 8^5 = 32768 \equiv 9, r \equ
 
 以上のアルゴリズムで、4.のパートに無駄があります。4.では$c$と$m$しか変更していないので、$t^{2^i}\not \equiv 1 \pmod p$ となる最大の $i$ が見つけられれば、4.の操作をまとめることができます。このアイデアを使うのが、本来の Tonelli-Shanks のアルゴリズムです。
 
-(TODO Wikipedia のTonelli-Shanks の説明)
+  \begin{algorithm}                      
+   \caption{Tonelli-Shanks のアルゴリズム}
+   \label{alg:tonelli-shanks}
+   入力: $p (\ge 3)$: 奇素数, $a (\not \equiv 0 \pmod p)$: 平方剰余
+
+   出力: $r^2 \equiv a \pmod p$ を満たす$r$
+
+   $p = q \times 2^s + 1$ とします。 ($s \ge 1$, $q$は奇数)
+
+   1. $z^{(p-1)/2} \equiv -1 \pmod p$ となるような $z$ を選ぶ。このような $z$ は確率1/2でヒットするため、何個か試せば必ず見つかる。
+
+   2. $m := s, c:\equiv z^q, t :\equiv a^q, r :\equiv a^{(q + 1)/2}$ とする。以降不変量 $\bm{r^2\equiv at \pmod p, t^{2^{m - 1}} \equiv 1 \pmod p, c^{2^{m-1}} \equiv -1 \pmod p}$ を崩さないように注意して操作する。
+
+   3. 以降 $m$ を減らしていく。$m$ が1なら終了。そうでなければ、$t^{2^k} \equiv 1 \pmod p$ となるような最小の整数 $k$ を求める。これは二分累乗法でできる。この $k$ は $1 \le k \le m - 1$ を満たす。
+
+   4. $c :\equiv c^{2^{m - k}} \pmod p, t :\equiv c^{2^{m - k}} t \pmod p, r :\equiv c^{2^{m - k - 1}}r \pmod p, m := k$ を\emph{全て同時に}代入する, 3.へ行く。
+  \end{algorithm}
 
  以上を使うと、次の問題が解けます。
 
