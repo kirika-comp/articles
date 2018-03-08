@@ -25,8 +25,10 @@
   アルゴリズムを考える時は、ループや再帰呼び出しのある地点で、どのような条件が常に成り立っているか、どのような値が保たれているかを考察することが、アルゴリズムの理解を助けることがあります。
   このような条件や値のことを、\emph{不変量}\index{ふへんりょう@不変量} (\emph{invariant}) と呼びます。
 
-  例として、拡張ユークリッドの互除法の実装を与えます。
-  ここで、各再帰呼び出しの\verb+return+ 直前に$ax+by=\gcd(a,b)$ が成り立っていることに注意してください。
+  例として、拡張ユークリッドの互除法と呼ばれるアルゴリズムの実装を与えます。
+  拡張ユークリッドの互除法は、2個の整数 $a, b$ を入力とし、$\gcd(a, b)$ に加えて$ax + by = \gcd(a, b)$ を満たす$\tuple{x, y}$ も返すアルゴリズムです。
+
+  以下のコードで、各再帰呼び出しの\verb+return+ 直前に$ax+by=\gcd(a,b)$ が成り立っていることに注意してください。この性質によって、最終的な返り値が $ax+by=\gcd(a,b)$ を満たすことが、つまりこのアルゴリズムが正しいことが分かります。
   \lstinputlisting[caption=extgcd.cpp,label=extgcd]{./extgcd.cpp}
  \section{mod $p$上の計算 (モジュラー演算)}
  \label{sec:mod-p-arithmetic}
@@ -63,7 +65,7 @@
    答えは分数$A/B$ になる。このとき、$B$ の mod $(10^9+7)$ での逆元を$B^{-1}$ として、$A \times B^{-1} \bmod (10^9 + 7)$を出力せよ。
   \end{center}
   これも、特別な配慮などはせずに、途中結果をmod $(10^9+7)$ で保持しておくだけで、計算が正しく行えます。
-  \begin{itembox}[l]{問題}
+  \begin{itembox}[l]{問題例}
    \begin{itemize}
     \item Codeforces Round \#465 (Div. 2) D. Fafa and Ancient Alphabet
    \end{itemize}
@@ -605,7 +607,8 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
    素数$p$ と、長さ$n$の整数列$A$と、長さ $m$ の整数列 $B$ が与えられる。このとき、
    $(A_i B_j) \bmod p < l$ となるような組$\tuple{i, j}$ の個数を求めよ。
 
-   制約: $2 \le p \le 250000$, $1 \le l \le p$, $2 \le n, m \le 10000000=10^7$
+   制約: $2 \le p \le 250000$, $1 \le l \le p$, $2 \le n, m \le 10000000=10^7$,
+   $A$ と $B$ は、種が与えられた乱数生成器によって生成される。
 
    (出典: Facebook Hacker Cup 2011 Round2 - Scott's New Trick \url{http://techtipshoge.blogspot.jp/2012/04/facebook-hacker-cup-2011-round2-scott.html})
   \end{itembox}
