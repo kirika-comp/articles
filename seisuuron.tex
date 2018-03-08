@@ -182,16 +182,6 @@
    \begin{example}
     $p = 13$ の場合を考えます。このとき、平方剰余は$0=0^2$,$1=1^2$,$3\equiv 4^2$,$4=2^2$,$9=3^2$,$10\equiv 6^2$,$12 \equiv 5^2 \pmod{13}$の7個です。0を除外すると1,3,4,9,10,12の6個で、${}\bmod 13$の0以外の同値類12個のうち、ちょうど半分が平方剰余、もう半分が平方非剰余です。なお、適当な平方非剰余$z$をとると、0以外の平方剰余に$z$を掛けたものはすべて平方非剰余です。例えば、$z=2$とすると、1,3,4,9,10,12に2を掛けて${}\bmod 13$したもの(2,6,8,5,7,11)はすべて平方非剰余です。
    \end{example}
-   \subsection{群\level{4}}
-   乗算と、乗算の逆元と、乗算の単位元が定義された集合のことを\defineRuby{群}{ぐん}と呼びます。
-   \subsubsection{加法群\level{4}}
-   素数$p$ に対して、$p$で割った余り全体の集合を$\Z/p\Z$と書きます。$\Z/p\Z$ は、加法を演算として、群の構造を持ちます。
-   この群は、真の部分群が存在しない群です。
-   \subsubsection{乗法群\level{4}}
-   $\Z/p\Z$ のうち、0以外の元には乗法の逆元が存在することは、\ref{subsec:inverse-element}で確かめました。これらの元からなる集合を$(\Z/p\Z)^*$ と表記し、$\Z/p\Z$の\emph{乗法群} \index{じょうほうぐん@乗法群} (\emph{multiplicative group}) と呼びます。
-
-   平方剰余全体の集合をここでは$H$と書くことにします。$H$は $(\Z/p\Z)^*$ の部分群です。
-   \ref{subsubsec:quadratic-residue} でみたように、平方非剰余$z \not \in H$を適当にとると、$zH := \{zh \mid h \in H\}$と$H$は共通部分を持たず、また$H \cup zH = (\Z/p\Z)^*$ です。
   \subsection{mod\_sqrt, Tonelli-Shanks のアルゴリズム\level{3}}
   \label{subsec:tonelli-shanks}
 \subsubsection{問題}
@@ -261,7 +251,7 @@ $m := 3, c :\equiv 7^5 = 16807 \equiv 38, t :\equiv 8^5 = 32768 \equiv 9, r \equ
  \end{table}
 
 
-よって、$x \equiv \pm 34 (=\mp 7)$ が答えになります。
+よって、$x \equiv \pm 34 (\equiv \mp 7)$ が答えになります。
 
 
 以上のアルゴリズムで、4.のパートに無駄があります。4.では$c$と$m$しか変更していないので、$t^{2^i}\not \equiv 1 \pmod p$ となる最大の $i$ が見つけられれば、4.の操作をまとめることができます。このアイデアを使うのが、本来の Tonelli-Shanks のアルゴリズムです。
@@ -305,7 +295,35 @@ $m := 3, c :\equiv 7^5 = 16807 \equiv 38, t :\equiv 8^5 = 32768 \equiv 9, r \equ
 \begin{itembox}[l]{COLUMN}
  群論的なアプローチをすると、Algorithm~\ref{alg:simplified-tonelli-shanks} についてもっと綺麗な見方が得られます。
 $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-Sylow部分群\index{Sylowぶぶんぐん@Sylow部分群}) $H \cong \Z/2^s\Z$ を考えます。このとき、$z$ と $t$ は $H$ の元であることがわかります。$t$が$1$になるように、うまく$H^2 := \{h^2 \mid h \in H\}$の元で調整しているわけです。
+
+ このあたりの話題は、この後のセクション\ref{sec:group-theory} で詳しく紹介します。
 \end{itembox}
+ \section{群論\level{4}}
+ \label{sec:group-theory}
+  \subsection{群\level{4}}
+  結合法則を満たす乗算と、乗算の逆元と、乗算の単位元が定義された集合のことを\defineRuby{群}{ぐん} (\emph{group}) と呼びます。例えば、整数全体の集合$\Z$ や、有理数全体の集合$\Q$ は、加法を演算とした群です。
+  $n$ 要素の置換全体の集合は $n!$ 個の要素を持ちますが、この集合は置換の合成を演算として群をなします。この群を\defineRuby{対称群}{たいしょうぐん} (\emph{symmetric group}) と呼び、$S_n$ と表記します。また、$n$を正の整数として、可逆な$n$次実数係数行列全体は、行列積という演算で群をなします。
+
+  群の演算は、交換法則$a * b = b * a$ を満たさなくても構いません。満たす場合、その群は\defineRuby{アーベル群 (可換群)}{あーべるぐん} (\emph{abelian group (commutative group)}) と呼ばれます。$\Z$ や $\Q$ はアーベル群の例です。3次以上の対称群や、$n \ge 2$ のときの$n$次可逆実数係数行列全体の群は、アーベル群でない群の例です。
+
+   群 $G$ の部分集合であって、$G$ の演算でまた群となるものを、$G$ の\defineRuby{部分群}{ぶぶんぐん} (\emph{subgroup}) と呼びます。たとえば、偶数だけを集めた集合 $2\Z := \{2x \mid x \in \Z\}$ に加法という演算を入れた群は、 $\Z$ の部分群です。
+   \subsubsection{巡回群\level{4}}
+   $G$ が \defineRuby{巡回群}{じゅんかいぐん} (\emph{cyclic group})であるとは、ある要素$g \in G$ が存在して、任意の要素 $x \in G$ が $x = g^i = g \cdot g \cdot \cdots \cdot g$ の形で表せることをいいます。この $g$ のことを\defineRuby{生成元}{せいせいげん} (\emph{generator}) と呼びます。
+   整数$m$ に対して、$m$で割った余り全体の集合を$\Z/m\Z$と書きます。$\Z/m\Z$ は、加法を演算として、群の構造を持ちます。これは巡回群の一例となっています。
+   これ以降、$\Z/m\Z$ の元の演算については、合同式の $\equiv$ と $\pmod m$ を適宜省略します。たとえば、
+   \begin{displaymath}
+    x = 4 \in \Z/10\Z, y = 7 \in \Z/10\Z \mbox{のとき、} x + y = 1
+   \end{displaymath}
+   などという数式を書くことがあります。
+   \subsubsection{乗法群\level{4}}
+   $\Z/m\Z$ の要素のうち、$m$と互いに素な元には乗法の逆元が存在することは、\ref{subsec:inverse-element}で確かめました。これらの元からなる集合を$(\Z/m\Z)^*$ と表記し、$\Z/m\Z$の\emph{乗法群} \index{じょうほうぐん@乗法群} (\emph{multiplicative group}) と呼びます。例えば、$(\Z/7\Z)^* = \{1,2,3,4,5,6\}, (\Z/10\Z)^* = \{1,3,7,9\}$ です。
+   これの演算についても、今後は $\equiv$ と $\pmod m$は適宜省略します。たとえば、$(\Z/7\Z)^*$ において$3^4 = 81 = 4$ である、というようにです。
+
+   $m$が素数$p$のとき、$(\Z/p\Z)^*$ は巡回群であることが知られています。\footnote{$(\Z/m\Z)^*$が巡回群となる $m$ は、$m = 2, 4, p^e, 2p^e$ ($p$ は奇素数) の形に限られることが知られています。} $(\Z/p\Z)^*$ の生成元のことを、${} \bmod p$ における\defineRuby{原始根}{げんしこん} (\emph{primitive root}) と呼びます。
+   例えば、$(\Z/7\Z)^*=\{1,2,3,4,5,6\}$ について、$3^0=1,3^1=3,3^2=2,3^3=6,3^4=4,3^5=5$ であるため、$3$はmod 7 における原始根です。
+
+   ここで、${} \bmod p$ の0以外の平方剰余全体の集合を$H$と書くことにして、$H$ の群論的性質を見てみましょう。$H$は $(\Z/p\Z)^*$ の部分群です。
+   \ref{subsubsec:quadratic-residue} でみたように、平方非剰余$z \not \in H$を適当にとると、$zH := \{zh \mid h \in H\}$と$H$は共通部分を持たず、また$H \cup zH = (\Z/p\Z)^*$ です。このように、群論では、部分群を用いた類別が綺麗に成功し、要素を性質によって等分することができる場合があります。この場合、0以外の平方剰余と平方非剰余が同じ個数だけ存在することが、このように表現できます。
  \section{平方剰余の相互法則と2次体\level{4}}
   \subsection{ルジャンドル記号}
   \label{subsec:legendre-symbol}
@@ -651,7 +669,7 @@ for i in 0..p{
   ここで、上の擬似コードに畳み込みのようなものが出現していることに着目します。畳み込みで加算になっているべきところが\verb+(i*j)%p+ になっています。
   そのため、$(\Z/p\Z)^*$ の群構造に着目して、この問題を解きたいと思います。
 
-  $(\Z/p\Z)^*$は\defineRuby{巡回群}{じゅんかいぐん}であることが知られています。つまり、ある要素 $g \in (\Z/p\Z)^*$ が存在して、$(\Z/p\Z)^*$ の要素 $x \in (\Z/p\Z)^*$ はすべて、$x = g^i$ の形で表せるということです。このような$g$ のことを、${} \bmod p$ における\defineRuby{原始根}{げんしこん} (\emph{primitive root}) と呼びます。
+  セクション~\ref{sec:group-theory} でみたように、$(\Z/p\Z)^*$は巡回群であることが知られています。つまり、ある要素 (生成元) $g \in (\Z/p\Z)^*$ が存在して、$(\Z/p\Z)^*$ の要素 $x \in (\Z/p\Z)^*$ はすべて、$x = g^i$ の形で表せるということです。このような$g$ のことを、${} \bmod p$ における原始根と呼ぶのでした。
   ここで、$x = g^i$, $y = g^j$ とすると、$xy \bmod p = g^ig^j \bmod p = g^{i+j}$です。つまり、acやbcの添字を写像 $i \mapsto g^i$ で写せば、普通の畳み込みに帰着できます。
 
   原始根の計算方法について説明します。ある要素 $a \in (\Z/p\Z)^*$ が原始根であるかどうかは、brute force により $O(p)$ 時間で検査できます。それでは、原始根はどのくらいの割合で存在するでしょうか?
@@ -744,12 +762,12 @@ for i in 0..p{
  \begin{definition}
   可換環$R$の\emph{イデアル}\index{イデアル@イデアル} (\emph{ideal}) とは、$R$の部分集合$I$であって、以下の2条件を満たすものである:
   \begin{itemize}
-   \item $x \in R, y \in R \to x + y \in R$
+   \item $x \in I, y \in I \to x + y \in I$
    \item $x \in R, y \in I \to xy \in R$
   \end{itemize}
  \end{definition}
  \begin{definition}
-  可換環$R$とその要素$x \in R$に対して、$x$\emph{によって生成される単項イデアル} (\emph{a principal ideal generated by $x$}) とは、$xR = \{ xy \mid y \in R\}$ のことである。これを$(x)$と表記する。
+  可換環$R$とその要素$x \in R$に対して、$x$\emph{によって生成される単項イデアル} (\emph{a principal ideal generated by $x$}) とは、$xR := \{ xy \mid y \in R\}$ のことである。これを$(x)$と表記する。
  \end{definition}
  \begin{definition}
   \emph{単項イデアル整域}\index{たんこういであるせいいき@単項イデアル整域} (\emph{principal ideal domain}, PID) (独: \emph{Hauptidealbereich}, ハウプトイデアールべライヒ) とは、全てのイデアルが単項生成であるような整域である。
@@ -760,13 +778,13 @@ for i in 0..p{
 
  以下の問題を考えてみましょう。
  \begin{itembox}[l]{問題}
-  $(P, Q)$-サンタがいる。$(P, Q)$-サンタは最初原点におり、$(x, y)$からは$(x \pm P, y \pm Q)$ または $(x \pm Q, y\pm P)$ の8種類の点に移動できる。
+  $(P, Q)$-サンタがいる。$(P, Q)$-サンタは最初原点 $(0, 0)$ におり、$(x, y)$からは$(x \pm P, y \pm Q)$ または $(x \pm Q, y\pm P)$ の8種類の点に移動できる。
   $N$人の子供の座標$(X_i,Y_i)$が与えられるので、$(P, Q)$-サンタが到達できる子供の数を求めよ。
 
   (出典: yukicoder No.321 (P,Q)-サンタと街の子供たち)
  \end{itembox}
  この問題に限り、添字との混同を防ぐため、虚数単位を$\sqrt{-1}$と表記します。
- 座標$(x,y)$に到達可能として、$x+y\sqrt{-1}$がどのような条件を満たすべきかを考えてみましょう。
+ 座標$(x,y)$に到達可能なとき、$x+y\sqrt{-1}$がどのような条件を満たすべきかを考えてみましょう。
  問題の移動は、$x+y\sqrt{-1}$から$x+y\sqrt{-1}\pm (P+Q\sqrt{-1})$,$x+y\sqrt{-1}\pm (P-Q\sqrt{-1})$,$x+y\sqrt{-1}\pm (Q+P\sqrt{-1})$,$x+y\sqrt{-1}\pm (Q-P\sqrt{-1})$の8種類の点に移動するものと考えることができます。
  $Q-P\sqrt{-1}=-\sqrt{-1}(P+Q\sqrt{-1})$, $Q+P\sqrt{-1}=\sqrt{-1}(P-Q\sqrt{-1})$に注意すると、結局移動できるのは
  \begin{displaymath}
