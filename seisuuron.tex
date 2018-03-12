@@ -572,6 +572,7 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
    NTT (number theoretic transformation) (FMT (fast modulo transformation) ともいう) という手法があります。これは、doubleの代わりに Proth prime $p = k \times 2^n + 1$ をmodとした環の上でFFTをするという手法です。
    整数演算なので誤差が出ないのが嬉しいです。その上、doubleの上で行うFFTと比べてもパフォーマンスに大きな違いはありません。
    詳しくは\url{http://math314.hateblo.jp/entry/2015/05/07/014908} を見てください。
+   サブセクション\ref{subsec:mod-convolution} でも少し触れます。
   \end{itembox}
   \subsection{フェルマーの小定理~\level{3}}
   \begin{theorem}
@@ -641,7 +642,7 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
 
   また、 \url{http://math314.hateblo.jp/entry/2015/05/07/014908} を参考にした NTT による実装も行いました。
   ソースコードは割愛しますが、\url{https://www.codechef.com/viewsolution/17544576} で公開されています。double型FFTは2.16secで、NTTは2.72secで終了したので、両者に大きなパフォーマンスの違いはありません。(NTTは3並列でやったので、2並列にしたらNTTの方が早くなる可能性もあります。)
-  \subsection{原始根を用いた畳み込み~\level{4}}
+  \subsection{巡回群構造を用いた特殊な畳み込み~\level{4}}
   \label{subsec:convolution-with-primitive-roots}
   \begin{itembox}[l]{問題}
    素数$p$ と、長さ$n$の整数列$A$と、長さ $m$ の整数列 $B$ が与えられる。このとき、
@@ -680,19 +681,36 @@ for i in 0..p{
   原始根の計算方法について説明します。ある要素 $a \in (\Z/p\Z)^*$ が原始根であるかどうかは、brute force により $O(p)$ 時間で検査できます。それでは、原始根はどのくらいの割合で存在するでしょうか?
   ある原始根$g$に対して$a = g^i$ となっている場合、$\gcd(i, p - 1) = 1$ であることと
   $a$ が原始根であることは同値です。
-  $p-1 = q_1^{e_1} \cdots q_k^{e^k}$を$p-1$の素因数分解とすると、上の条件を満たす$i$を選ぶ確率は$(q_1-1)\cdots(q_k-1)/q_1\cdots q_k$ です。$p\le 250000$ より、$k$ は最大でも$5$ 程度であり、$a$ が原始根である確率は十分大きいだと言えるでしょう。以上より、ランダムに$a$を選び、原始根かどうか調べることによって、原始根を得ることができます。(もっと高速な方法もあります。考えてみましょう)
+  $p-1 = q_1^{e_1} \cdots q_k^{e^k}$を$p-1$の素因数分解とすると、上の条件を満たす$i$を選ぶ確率は$(q_1-1)\cdots(q_k-1)/q_1\cdots q_k$ です。$p\le 250000$ より、$k$ は最大でも$5$ 程度であり、$a$ が原始根である確率は十分大きいだと言えるでしょう。以上より、ランダムに$a$を選び、原始根かどうか調べることによって、原始根を得ることができます。(もっと高速な方法もあります。考えてみましょう。答えはソースコード\ref{generator.py}の実装を読むと分かります。)
 
   実装するときは、$0$ 番目の要素の扱いに注意しましょう。$0$は$g^i$ の形で表せません。(この問題は公式のページが消えていて、実装してもジャッジできませんが…。)
   \subsection{1の$2^k$乗根$\bmod\ p$ を用いた畳み込み}
   \label{subsec:mod-convolution}
-  素数$p$が特殊な形$p = u2^e + 1$の場合、$k \le e$ なる$k$に対して、$2^k$要素の畳み込みができます。
+  素数$p$が特殊な形$p = u2^e + 1$ ($u$が小さく、$e$が大きい) の場合、$k \le e$ なる$k$に対して、$2^k$要素のFFTが (つまり結果として畳み込みが) できます。
   このような素数には、以下のようなものがあります。
-  \begin{itemize}
-   \item $998244353 = 119 \times 2^{23} + 1 = \verb+0x3b800001+$
-  \end{itemize}
 
-  原始根を$g$とすると、$g^u \bmod p$が$2^e$乗根を与えます。
+  \begin{table}[htb]
+   \begin{center}
+    \begin{tabular}[tb]{|c|c|c|c|}
+     \hline
+     $p$ & $u \times 2^e + 1$ & 16進表記 & 最小の原始根 \\
+     \hline
+     998244353 & $119 \times 2^{23} + 1$ & \verb+0x3b800001+ & 3 \\
+     167772161 & $5 \times 2^{25} + 1$ & \verb+0xa000001+ & 3 \\
+     469762049 & $7 \times 2^{26} + 1$ & \verb+0x1c000001+ & 3 \\
+     \hline
+    \end{tabular}
+   \end{center}
+  \end{table}
 
+  $\bmod\ p$ の原始根を$g$とすると、$g^u \bmod p$が$2^e$乗根を与えます。
+  modの値が$10^9+7$以外の場合は、このような特殊な素数ではないかと疑ってみて、16進表示を求めるなどすると良いでしょう。
+
+  有名な素数についてはもう原始根が計算されているので、それも表に書きました。
+  表にない素数が出題された時のために、一応原始根を計算するスクリプトを載せておきます。Python 3で書かれています。
+  \lstinputlisting[language=Python,caption=generator.py,label=generator.py]{generator.py}
+
+  $\bmod\ p$ における1の$2^k$乗根を利用したFFT (NTT) については、\url{http://math314.hateblo.jp/entry/2015/05/07/014908} を参考にしてください。
  \section{ペル方程式\level{4}}
  \label{sec:pells-equation}
  \begin{itembox}[l]{問題}
