@@ -30,7 +30,7 @@
 
   以下のコードで、各再帰呼び出しの\verb+return+ 直前に$ax+by=\gcd(a,b)$ が成り立っていることに注意してください。この性質によって、最終的な返り値が $ax+by=\gcd(a,b)$ を満たすことが、つまりこのアルゴリズムが正しいことが分かります。
   \lstinputlisting[caption=extgcd.cpp,label=extgcd]{./extgcd.cpp}
- \section{mod $p$上の計算 (モジュラー演算)}
+ \section{$\bmod\ p$上の計算 (モジュラー演算)}
  \label{sec:mod-p-arithmetic}
   \subsection{基本: 整数の加減乗除\level{1}}
   計算結果が大きすぎるため、適当な素数 $p$ に対して${} \bmod p$で出力せよ、という問題が結構あります。
@@ -62,7 +62,7 @@
   \label{subsec:operations-on-fractions}
   たまに、分数についての言及があることがあります。大抵以下のような形をしています。
   \begin{center}
-   答えは分数$A/B$ になる。このとき、$B$ の mod $(10^9+7)$ での逆元を$B^{-1}$ として、$A \times B^{-1} \bmod (10^9 + 7)$を出力せよ。
+   答えは分数$A/B$ という形で表すことができ、$B$ は $10^9 + 7$ と互いに素であることが証明できる。このとき、$B$ の mod $(10^9+7)$ での逆元を$B^{-1}$ として、$A \times B^{-1} \bmod (10^9 + 7)$を出力せよ。
   \end{center}
   これも、特別な配慮などはせずに、途中結果をmod $(10^9+7)$ で保持しておくだけで、計算が正しく行えます。
   \begin{itembox}[l]{問題例}
@@ -77,7 +77,7 @@
  \label{sec:exponentiation-by-squaring}
  二分累乗法とよばれる基本テクニックがあります。
 
- 結合法則を満たす「掛け算」$x \cdot y$ が定義されているような代数的構造 (\emph{モノイド}\index{ものいど@モノイド}と呼びます) の上で、$x$ の $e$乗 $x^e = x \cdot \cdots \cdot x$は$2\log_2 e$回以内の掛け算で計算できます。この方法を\emph{二分累乗法}\index{にぶんるいじょうほう@二分累乗法} (\emph{exponentiation by squaring}) と呼びます。
+ (単位元を持ち、) 結合法則を満たす「掛け算」$x \cdot y$ が定義されているような代数的構造 (\emph{モノイド}\index{ものいど@モノイド}と呼びます) の上で、$x$ の $e$乗 $x^e = x \cdot \cdots \cdot x$は$2\log_2 e$回以内の掛け算で計算できます。この方法を\emph{二分累乗法}\index{にぶんるいじょうほう@二分累乗法} (\emph{exponentiation by squaring}) と呼びます。
 
  二分累乗法には2種類の方法があります。一つ目は、$e$の2進表記の小さい桁の方から計算をする方法で、もう一つは$e$ の2進表記の大きい桁の方から計算をする方法です。整数のmodつき掛け算を例にして、両方のアルゴリズムを紹介します。
 
@@ -137,10 +137,13 @@
 
    (出典: ARC020 C - A mod B Problem)
   \end{itembox}
-  $B$が素数の場合、$A$は等比数列の総和の公式を使って、以下のような閉じた式の形で書けるので、計算することは簡単です。ここで、$b_i$は$a_i$の桁数です。
+  $B$が素数の場合、$A$は等比数列の総和の公式を使って、以下のような閉じた式の形で書けるので、計算することは簡単です。ここで、$b_i$は$a_i$の桁数で、
   \begin{displaymath}
-   A = a_N f(10^{b_N},l_N)+10^{b_N \times l_N}(a_{N-1}f(10^{b_{N-1}},l_{N-1}) + 10^{b_{N-1} \times l_{N-1}} ( \ldots)),
-   f(y,z) = 1+y+\cdots+y^{z-1} = \frac{y^z-1}{y-1}
+   f(y,z) := 1+y+\cdots+y^{z-1} = \frac{y^z-1}{y-1}
+  \end{displaymath}
+  と定義します。
+  \begin{displaymath}
+   A = a_N f(10^{b_N},l_N)+10^{b_N \times l_N}(a_{N-1}f(10^{b_{N-1}},l_{N-1}) + 10^{b_{N-1} \times l_{N-1}} ( \ldots))
   \end{displaymath}
   問題は$B$が素数でない場合です。
   $f(y,z)$の計算の中で、$y-1$による除算を行っていますが、$y-1$と$B$が互いに素でない場合に、これは失敗します。
@@ -166,7 +169,7 @@
    (出典: Codeforces Round \#467 (Div. 2) B. Vile Grasshoppers)
   \end{itembox}
   まず、$z$が素数なら問題の条件は確実に満たされます。$y$付近の素数の密度は$\Theta(1/\log y)$ なので、$O(\log y)$個程度調べれば、一つは素数が見つかる計算です。与えられた$z$が問題の条件を満たすかどうかの判定は$O(\min(p, \sqrt{y}))$でできるので、$y$から大きい順に調べていくことで、時間計算量$O(\min(p, \sqrt{y})\log y)$で解くことができます。
- \section{${}\bmod p$ のアルゴリズム}
+ \section{$\bmod\ p$ のアルゴリズム}
   \subsection{基礎知識}
   \label{subsec:group-preliminaries}
    \subsubsection{フェルマーの小定理\level{1}}
@@ -176,11 +179,11 @@
    \end{theorem}
    \subsubsection{平方剰余\level{3}}
    \label{subsubsec:quadratic-residue}
-   $a \equiv x^2 \pmod p$ となる $x$ が存在する場合、$a$を${}\bmod p$ における \emph{平方剰余}\index{へいほうじょうよ@平方剰余} (\emph{quadratic residue})、そうでない場合 $a$ を\emph{平方非剰余}\index{へいほうひじょうよ@平方非剰余} (\emph{quadratic non-residue})と呼びます。
-   $p$ が奇素数の時、0を除くと平方剰余と平方非剰余の割合は1:1です。
-   また、$a\not\equiv 0 \pmod p$ のとき$a^{(p-1)/2}$ は ${}\bmod p$ で $1$ か $-1$ かのどちらかですが、$a$ が平方剰余のとき$1$、平方非剰余のとき$-1$です。
+   $a \equiv x^2 \pmod p$ となる $x$ が存在する場合、整数 $a$を$\bmod\ p$ における \emph{平方剰余}\index{へいほうじょうよ@平方剰余} (\emph{quadratic residue})、そうでない場合 $a$ を\emph{平方非剰余}\index{へいほうひじょうよ@平方非剰余} (\emph{quadratic non-residue})と呼びます。
+   $p$ が奇素数の時、$1$から$p-1$までの整数の中の、平方剰余と平方非剰余の割合は1:1です。
+   また、$a\not\equiv 0 \pmod p$ のとき$a^{(p-1)/2}$ は $\bmod\ p$ で $1$ か $-1$ かのどちらかと合同ですが、$a$ が平方剰余のとき$1$、平方非剰余のとき$-1$です。
    \begin{example}
-    $p = 13$ の場合を考えます。このとき、平方剰余は$0=0^2$,$1=1^2$,$3\equiv 4^2$,$4=2^2$,$9=3^2$,$10\equiv 6^2$,$12 \equiv 5^2 \pmod{13}$の7個です。0を除外すると1,3,4,9,10,12の6個で、${}\bmod 13$の0以外の同値類12個のうち、ちょうど半分が平方剰余、もう半分が平方非剰余です。なお、適当な平方非剰余$z$をとると、0以外の平方剰余に$z$を掛けたものはすべて平方非剰余です。例えば、$z=2$とすると、1,3,4,9,10,12に2を掛けて${}\bmod 13$したもの(2,6,8,5,7,11)はすべて平方非剰余です。
+    $p = 13$ の場合を考えます。このとき、$\bmod\ 13$における平方剰余のうち、0以上12以下のものは $0=0^2$,$1=1^2$,$3\equiv 4^2$,$4=2^2$,$9=3^2$,$10\equiv 6^2$,$12 \equiv 5^2 \pmod{13}$の7個です。0を除外すると1,3,4,9,10,12の6個で、1から12までの整数のうち、ちょうど半分が平方剰余、もう半分が平方非剰余です。なお、適当な平方非剰余$z$をとると、0以外の平方剰余に$z$を掛けたものはすべて平方非剰余です。例えば、$z=2$とすると、1,3,4,9,10,12に2を掛けて$\bmod\ 13$したもの(2,6,8,5,7,11)はすべて平方非剰余です。
    \end{example}
   \subsection{mod\_sqrt, Tonelli-Shanks のアルゴリズム\level{3}}
   \label{subsec:tonelli-shanks}
@@ -189,10 +192,10 @@
 
 \subsubsection{解法}
 まず、簡単のため $p = 2$ の場合を除外します(このときは$a^2 \equiv a \pmod 2$ なので簡単)。また$a \equiv 0 \pmod p$ の場合も除外します($0^2 = 0$なので簡単)。
-$p$ が${}\bmod 4$ で3の時は簡単です。$x \equiv a^{(p+1)/4}$とすると、$x^2 \equiv a^{(p+1)/2}$ です。ここで、$a \equiv y^2$ となる $y$ が存在するので、$a^{(p-1)/2}\equiv y^{p-1}\equiv 1 \pmod p$ です。
+$p$ が$\bmod\ 4$ で3の時は簡単です。$x \equiv a^{(p+1)/4}$とすると、$x^2 \equiv a^{(p+1)/2} = a^{(p-1)/2}a \pmod p$ です。ここで、$a \equiv y^2$ となる $y$ が存在するので、$a^{(p-1)/2}\equiv y^{p-1}\equiv 1 \pmod p$ です。
 だから、$x^2 \equiv a$ が成り立ちます。
 
-$p$ が ${}\bmod 4$ で 1の時は結構複雑なことをします。ここではTonelli-Shanksの方法と呼ばれるアルゴリズムを説明します。
+$p$ が $\bmod\ 4$ で 1の時は結構複雑なことをします。ここではTonelli-Shanksの方法と呼ばれるアルゴリズムを説明します。
 
    \subsubsection{Tonelli-Shanks (トネリ-シャンクス) のアルゴリズム}
 Reference: \url{https://en.wikipedia.org/wiki/Tonelli%E2%80%93Shanks_algorithm}
@@ -206,7 +209,7 @@ Reference: \url{https://en.wikipedia.org/wiki/Tonelli%E2%80%93Shanks_algorithm}
 \label{alg:simplified-tonelli-shanks}
 入力: $p (\ge 3)$: 奇素数, $a (\not \equiv 0 \pmod p)$: 平方剰余
 
-出力: $r^2 \equiv a \pmod p$ を満たす$r$
+出力: $r^2 \equiv a \pmod p$, $1 \le r \le p - 1$ を満たす整数 $r$
 
 $p = q \times 2^s + 1$ とします。 ($s \ge 1$, $q$は奇数)
 
@@ -214,7 +217,7 @@ $p = q \times 2^s + 1$ とします。 ($s \ge 1$, $q$は奇数)
 
 2. $m := s, c:\equiv z^q, t :\equiv a^q, r :\equiv a^{(q + 1)/2}$ とする。以降不変量 $\bm{r^2\equiv at \pmod p, t^{2^{m - 1}} \equiv 1 \pmod p, c^{2^{m-1}} \equiv -1 \pmod p}$ を崩さないように注意して操作する。
 
-3. 以降 $m$ を減らしていく。$m$ が1なら終了。そうでなければ、$t^{2^{m-2}} \equiv 1 \pmod p$ なら4.へ、そうでなければ5.へ行く。
+3. 以降 $m$ を減らしていく。$m$ が1なら終了し、$r \bmod p$ を返す。そうでなければ、$t^{2^{m-2}} \equiv 1 \pmod p$ なら4.へ、そうでなければ5.へ行く。
 
 4. $c :\equiv c^2 \pmod p, m := m - 1$, 6.へ行く。
 
@@ -428,8 +431,8 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
   ここでは、$a_n = (2+\sqrt{3})^{2^n} + (2-\sqrt{3})^{2^n} - 2$ であることがわかっているとして、この状態から問題を解いてみましょう。$a_n \bmod M$が計算できれば良いです。
 
   $(2+\sqrt{3})^{2^n} \bmod M$が計算できれば万事解決です。
-  簡単のため、$M$が2でも3でもないとしましょう。3が${}\bmod M$で平方剰余なら(つまり$\legendre{3}{M}=1$なら)、議論は$\finiteField{M}$の中で完結できます。
-  3が${}\bmod M$で平方非剰余(つまり$\legendre{3}{M}=-1$)の場合を考えます。
+  簡単のため、$M$が2でも3でもないとしましょう。3が$\bmod\ M$で平方剰余なら(つまり$\legendre{3}{M}=1$なら)、議論は$\finiteField{M}$の中で完結できます。
+  3が$\bmod\ M$で平方非剰余(つまり$\legendre{3}{M}=-1$)の場合を考えます。
   このとき、$\finiteField{M}$に$\sqrt{3}$を添加して拡大したものは、$\finiteField{M^2}$と同型になります。
   \begin{displaymath}
    \finiteField{M}(\sqrt{3}) \cong \finiteField{M^2}
@@ -440,7 +443,7 @@ $(\Z/p\Z)^* \cong \Z/(p-1)\Z \cong (\Z/2^s\Z) \times (\Z/q\Z)$ の2冪成分(2-S
 
   この問題は筆者が writer でした。ソースコードを以下に載せます。\url{https://yukicoder.me/submissions/239504} からアクセスすることもできます。 (今回限り Java です。)
   \lstinputlisting[caption=yukicoder-613.java,label=yukicoder-613.java,language=Java]{yukicoder-613.java}
- \section{${}\bmod p$ のアルゴリズム その2}
+ \section{$\bmod\ p$ のアルゴリズム その2}
  \label{sec:mod-p-2}
   \subsection{mod\_sqrt その2, Lehmer のアルゴリズム\level{3}}
   \label{subsec:karp-mod-sqrt}
