@@ -74,6 +74,44 @@
   \begin{itembox}[l]{COLUMN}
    専門用語を使うと、これは素数 $p$ について自然に定まる環準同型$\Z \to \Z/p\Z$が、環準同型$\Z_{(p)} \to \Z/p\Z$ に拡張できる、ということができます(ただし、$\Z_{(p)}$は、$\Z$のイデアル$(p)$による\emph{局所化}と呼ばれるもので、分子が任意、分母が$p$の倍数でないような分数全体からなる環)。興味のある人は、「局所化」や「附値環」などの単語で調べてみてください。
   \end{itembox}
+ \section{数表の作り方\level{1}}
+ \label{sec:how-to-create-tables}
+ 前計算で数表を作っておき、あとで使うことが必要になる問題があります。
+ このセクションでは、それらのうちよく見るものをまとめます。
+  \subsection{階乗 $n! \bmod m$\level{1}}
+  よく見られます。テーブルを作っていないと $O(n)$ 時間かかりますが、前計算に $O(N)$ 時間かけると $0 \le n\le N$ に対する $n! \bmod m$ が $O(1)$ 時間で計算できます。
+
+  \lstinputlisting[caption=factorial.cpp,label=factorial.cpp]{factorial.cpp}
+  \subsection{整数定数 $c$ に対する $c^n \bmod m$ \level{1}}
+  よく見られます。テーブルを作っていないと $O(\log n)$ 時間かかりますが、前計算に $O(N)$ 時間かけると $0 \le n\le N$ に対する $c^n \bmod m$ が $O(1)$ 時間で計算できます。
+
+  \lstinputlisting[caption=power.cpp,label=power.cpp]{power.cpp}
+  \subsection{逆元\level{2}}
+  必要な場面は少ないですが、使える場面は多いです。テーブルを作っていないと $O(\log n)$ 時間かかりますが、前計算に $O(N)$ 時間かけると $1 \le n\le N$ に対する $n^{-1} \bmod m$ が $O(1)$ 時間で計算できます。
+
+  $N!$ と $m$ が互いに素であることが要請されます。
+  例えば $m$ が素数で $0 \le N < m$ ならばこの要請は満たされます。
+
+  \lstinputlisting[caption=inverse.cpp,label=inverse.cpp]{inverse.cpp}
+  \begin{itembox}[l]{COLUMN}
+   このような実装もあります。この実装では、$N$ と $m$ が互いに素であることが要請され、inv[i] の値は $i$ が $m$ と互いに素なら $i^{-1} \bmod m$ 、そうでなければ $0$ になります。
+   \lstinputlisting[caption=inverse-alt.cpp,label=inverse-alt.cpp]{inverse-alt.cpp}
+   この実装は\ref{inverse.cpp} の実装と、以下の点でトレードオフがあります。
+    \begin{center}
+     \begin{tabular}[tb]{|c|c|}
+      \hline
+      実装 & 軽い \\
+      コードの可読性 & 低い \\
+      制約 & ゆるい \\
+      速度 & mod が定数の場合は比較的低速 \\ \hline
+     \end{tabular}
+    \end{center}
+
+   好みや状況に応じて選びましょう。
+  \end{itembox}
+  \subsection{二項係数\level{1}}
+  よく見られます。階乗から導出できますが、それ以外の導出方法もあるので紹介します。
+  TODO
  \section{二分累乗法\level{1}}
  \label{sec:exponentiation-by-squaring}
  二分累乗法とよばれる基本テクニックがあります。
